@@ -121,7 +121,7 @@ namespace MyLibrary
 
 struct vertice
 {
-    int vertice, value;
+    int vertice, fromVertice, value;
 };
 
 struct edge
@@ -145,7 +145,7 @@ class Graph
 
         for(int v = 0; v < numOfVertices; v++)
         {
-            this->vertices[v] = {v, 0}; 
+            this->vertices[v] = {v, -1, -1}; 
         }
     }
 
@@ -442,9 +442,9 @@ class PriorityQueue
     private:
     MyLibrary::LinkedList<vertice>* queue;
 
-    vertice* newVertice(int v, int val = -1)
+    vertice* newVertice(int v, int fromV = -1, int val = -1)
     {
-        vertice* result = new vertice{ .vertice = v, .value = val };
+        vertice* result = new vertice{ .vertice = v, .fromVertice = fromV, .value = val };
 
         return result;
     }
@@ -494,7 +494,7 @@ class PriorityQueue
 
     int size(){ this->queue->size(); }
 
-    ReturnStatus chgPriority(int v, int val, bool smallest = true)
+    ReturnStatus chgPriority(int v, int fromV, int val, bool smallest = true)
     {
         MyLibrary::detail::Node<vertice>* chgNode = contains(v);
 
@@ -517,6 +517,7 @@ class PriorityQueue
         }
 
         chgNode->data->value = val;
+        chgNode->data->fromVertice = fromV;
         if(chgNode->prev != nullptr) chgNode->prev->next = chgNode->next;
         else this->queue->setHeadPointer(chgNode->next);
         if(chgNode->next != nullptr) chgNode->next->prev = chgNode->prev;
@@ -546,12 +547,12 @@ class PriorityQueue
 
     vertice* top(){ return this->queue->h()->data; }
 
-    ReturnStatus insert(int v, int val)
+    ReturnStatus insert(int v, int fromV, int val)
     {
         if(this->queue == nullptr)
         {
             this->queue = new MyLibrary::LinkedList<vertice>;
-            this->queue->prepend(newVertice(v, val));
+            this->queue->prepend(newVertice(v, fromV, val));
 
             if (DebugLevel > 3) cout << "PQ: First element added." << endl;
 
@@ -561,10 +562,10 @@ class PriorityQueue
         if(contains(v) != nullptr)
         {
             if (DebugLevel > 3) cout << "Vertice already exists. Changing priority..." << endl;
-            return chgPriority(v, val);
+            return chgPriority(v, fromV, val);
         }
 
-        return insertNodeSorted(this->queue->newNode(newVertice(v, val)));
+        return insertNodeSorted(this->queue->newNode(newVertice(v, fromV, val)));
     }
 
     ReturnStatus minPriority()
@@ -641,15 +642,12 @@ class ShortestPath
             cout << "Cost updated: " << cost << endl;
         }
         
-        int status = q->insert(fromNode, cost);
+        int status = q->insert(fromNode, lastNode, cost);
         cout<< "Node: " << fromNode << " cost: " << cost << endl;
 
         if (status == ReturnWarning) return ReturnWarning;
 
-        if(fromNode == toNode) 
-        {
-            return ReturnSuccess;
-        }
+        if(fromNode == toNode) return ReturnSuccess;
 
         cout << "Last Node: " << lastNode << " From Node: " << fromNode << " bool: " << firstNode << endl;
         tmp = g->isAdjacent(fromNode, neigh[0]);
@@ -660,11 +658,7 @@ class ShortestPath
 
             int nextNode = tmp->data->toNode->vertice;
 
-            if(recursivePath(nextNode, toNode, cost, fromNode, false) == ReturnSuccess)
-            {
-                v.insert(v.begin(), fromNode);
-                break;
-            }
+            if(recursivePath(nextNode, toNode, cost, fromNode, false) == ReturnSuccess) break;
 
             tmp = tmp->next;
         }
@@ -687,11 +681,16 @@ class ShortestPath
 
         recursivePath(fromNode, toNode, cost, fromNode);
 
-        if(v.size() > 1)
+        MyLibrary::detail::Node<vertice>* tmp = q->contains(toNode);
+
+        while(tmp != nullptr)
         {
-            v.insert(v.begin(), fromNode);
-            v.insert(v.end(), toNode);
+            v.insert(v.begin(), tmp->data->vertice);
+            if (tmp->data->vertice == fromNode) break;
+
+            tmp = q->contains(tmp->data->fromVertice);
         }
+
 
         return ReturnSuccess;
     }
@@ -704,10 +703,13 @@ class ShortestPath
     void printPath()
     {
         if(v.empty()) return;
+
+        cout<< "Dijkstra shortest Path: ";
         
         for(auto x: v)
         {
-            cout << x << "->";
+            cout << x;
+            if (x != v.back()) cout << "->";
         }
         cout << endl;
     }
@@ -801,7 +803,6 @@ int main()
     ShortestPath sp(&g);
 
     sp.path(0,8);
-    sp.printQueue();
     sp.printPath();
 
     return 0;
