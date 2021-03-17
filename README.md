@@ -13,6 +13,8 @@ This file is organised in the followin manner:
 ## Working mode
 Develop the desired logic in `main` file and compile it (`make`) in **build** folder. Afterwards, run the executable on a terminal to see the results.
 
+---
+
 **WARNING**: DO NOT CHANGE FILES/FOLDERS DISPOSITIONS, OTHERWISE IT WILL NOT COMPILE!
 
 ---
