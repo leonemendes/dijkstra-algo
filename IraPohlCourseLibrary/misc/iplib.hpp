@@ -20,6 +20,7 @@ using std::find;
 // Library files include
 #include "linked_list.hpp"
 #include "graph.hpp"
+#include "montecarlo_graph.hpp"
 #include "priority_queue.hpp"
 #include "dijkstra_algo.hpp"
 
