@@ -3,7 +3,7 @@
 
 // DEBUG LEVEL
 const int DebugLevel = 0;
-const int DebugLevelShortestPath = 1;
+const int DebugLevelShortestPath = 0;
 
 // TYPE DEIFINITIONS
 

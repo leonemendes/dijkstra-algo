@@ -6,6 +6,7 @@
 // Calling namespace library functions
 using ipc::Graph;
 using ipc::ShortestPath;
+using ipc::MonteCarloGraph;
 
 
 int main()
@@ -56,39 +57,49 @@ int main()
     // q.print();
 
 
-    Graph g(10);
+    // Graph g(10);
 
-    g.addEdge(0,1,4);
-    g.addEdge(0,2,3);
-    g.addEdge(0,4,7);
-    g.addEdge(0,6,1);
+    // g.addEdge(0,1,4);
+    // g.addEdge(0,2,3);
+    // g.addEdge(0,4,7);
+    // g.addEdge(0,6,1);
 
-    g.addEdge(1,3,1);
+    // g.addEdge(1,3,1);
 
-    g.addEdge(2,4,4);
-    g.addEdge(2,0,3);
+    // g.addEdge(2,4,4);
+    // g.addEdge(2,0,3);
 
-    g.addEdge(3,5,1);
+    // g.addEdge(3,5,1);
 
-    g.addEdge(4,5,1);
-    g.addEdge(4,6,5);
-    g.addEdge(4,8,3);
+    // g.addEdge(4,5,1);
+    // g.addEdge(4,6,5);
+    // g.addEdge(4,8,3);
 
-    g.addEdge(5,7,2);
-    g.addEdge(5,8,4);
+    // g.addEdge(5,7,2);
+    // g.addEdge(5,8,4);
 
-    g.addEdge(6,9,1);
+    // g.addEdge(6,9,1);
 
-    g.addEdge(7,5,2);
-    g.addEdge(7,8,3);
+    // g.addEdge(7,5,2);
+    // g.addEdge(7,8,3);
 
-    g.addEdge(8,6,5);
+    // g.addEdge(8,6,5);
 
-    g.print();
+    // g.print();
 
-    ShortestPath sp(&g);
+    // ShortestPath sp(&g);
 
-    sp.path(0,8);
+    // sp.path(0,8);
+    // sp.printPath();
+    // cout << "Path cost:" << sp.pathCost() << endl;
+
+    MonteCarloGraph m(40, 0.2);
+
+    // m.print();
+
+    ShortestPath sp(&m);
+
+    sp.path(0,40);
     sp.printPath();
     cout << "Path cost:" << sp.pathCost() << endl;
 
