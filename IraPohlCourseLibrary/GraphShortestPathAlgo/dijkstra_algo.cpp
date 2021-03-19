@@ -86,4 +86,4 @@ void ipc::ShortestPath::printPath()
 
 int ipc::ShortestPath::pathCost(){ return this->cost; }
 
-ipc::ShortestPath::~ShortestPath();
+ipc::ShortestPath::~ShortestPath(){};
