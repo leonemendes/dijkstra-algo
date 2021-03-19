@@ -1,5 +1,9 @@
 #include "graph.hpp"
 
+
+// Graph Class functions ----------------------
+
+// Private ----------------------
 void ipc::Graph::initVertices(int numOfVertices)
 {
     this->vertices = new ipc::detail::vertice[numOfVertices];
@@ -54,6 +58,10 @@ ReturnStatus ipc::Graph::addEdgeSorted(ipc::detail::Node<ipc::detail::edge>* nod
     return ReturnSuccess;
 }
 
+
+// Public ----------------------
+
+// Constructor
 ipc::Graph::Graph(int numOfVertices):numOfVertices(numOfVertices)
 {
     if (DebugLevel > 3) cout << "Class constructor called." << endl;
@@ -68,7 +76,7 @@ bool ipc::Graph::isValid(int v)
 {
     if(v >= numOfVertices)
     {
-        if (DebugLevel > 1) cout << "Input node do not exist." << endl;
+        if (DebugLevel > 1) cout << "Input node " << v << " does not exist." << endl;
         return false;           
     }
     else return true;
@@ -256,13 +264,14 @@ vector<int> ipc::Graph::neighbors(int fromNode)
 void ipc::Graph::print()
 {
     for (int v = 0; v < this->numOfVertices; v++){
-        cout << v << ": ";
+        cout << v << "-> ";
         if(ipc::Graph::hasEdges(v)){
             ipc::detail::Node<ipc::detail::edge>* tmp = this->edges[v]->h();
             
             while(tmp != nullptr)
             {
-                cout << "->(" << tmp->data->toNode->vertice <<", " << tmp->data->cost <<"),";
+                cout << "(" << tmp->data->toNode->vertice <<", " << tmp->data->cost <<")";
+                if(tmp->next != nullptr) cout << ", ";
                 tmp = tmp->next;
             }
         }
@@ -270,6 +279,7 @@ void ipc::Graph::print()
     }
 }
 
+// Destructor
 ipc::Graph::~Graph()
 {
     if (DebugLevel > 3) cout << "Graph Class destructor called." << endl;
@@ -294,5 +304,3 @@ ipc::Graph::~Graph()
     delete [] this->edges;
 
 }
-
-
