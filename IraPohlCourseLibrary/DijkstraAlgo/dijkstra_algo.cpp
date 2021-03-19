@@ -18,7 +18,11 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
 
     if (status == ReturnWarning) return ReturnWarning;
 
-    if(fromNode == toNode) return ReturnSuccess;
+    if(fromNode == toNode)
+    {
+        this->cost = cost;
+        return ReturnSuccess;
+    }
 
     cout << "Last Node: " << lastNode << " From Node: " << fromNode << " bool: " << firstNode << endl;
     tmp = g->isAdjacent(fromNode, neigh[0]);
@@ -37,7 +41,7 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
     return ReturnEndOfLoop;
 }
 
-ipc::ShortestPath::ShortestPath(Graph* g, PriorityQueue* q, vector<int> v):g(g), q(q), v(v){}
+ipc::ShortestPath::ShortestPath(Graph* g, PriorityQueue* q, vector<int> v):g(g), q(q), v(v), cost(0){}
 
 ReturnStatus ipc::ShortestPath::path(int fromNode, int toNode)
 {
@@ -83,6 +87,8 @@ void ipc::ShortestPath::printPath()
     }
     cout << endl;
 }
+
+int ipc::ShortestPath::pathCost(){ return this->cost; }
 
 ipc::ShortestPath::~ShortestPath()
 {

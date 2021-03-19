@@ -90,6 +90,7 @@ int main()
 
     sp.path(0,8);
     sp.printPath();
+    cout << "Path cost:" << sp.pathCost() << endl;
 
     return 0;
 }

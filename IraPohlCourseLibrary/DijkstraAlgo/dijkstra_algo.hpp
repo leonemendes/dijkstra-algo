@@ -22,6 +22,7 @@ namespace ipc
         Graph* g;
         PriorityQueue* q;
         vector<int> v;
+        int cost;
 
         ReturnStatus recursivePath(int fromNode, int toNode, int cost, int lastNode, bool firstNode = true);
 
@@ -33,6 +34,8 @@ namespace ipc
         void printQueue();
 
         void printPath();
+
+        int pathCost();
 
         ~ShortestPath();
     };
