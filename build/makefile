@@ -72,7 +72,7 @@ endef
 all: directories $(TARGET)
 
 $(TARGET): $(OBJS)	
-	@echo LINKING $@
+	@echo LINKING: $@
 	$(HIDE)$(CXX) $(OBJS) -o $(TARGET) $(LDFLAGS)
 
 # Include dependencies
