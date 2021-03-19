@@ -16,6 +16,8 @@ It was done with the hep of the following references:
 
 [[3] MIT  make Manual]( http://web.mit.edu/gnu/doc/html/make_1.html "MIT  make Manual")
 
+[[4] Makefile Tutorial by Example]( https://makefiletutorial.com/#makefile-cookbook "Makefile Cookbook")
+
 ---
 
 **WARNING**: DO NOT CHANGE FILES/FOLDERS DISPOSITIONS, OTHERWISE IT WILL NOT COMPILE!
