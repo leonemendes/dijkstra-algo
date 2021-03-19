@@ -10,11 +10,11 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
     if(!firstNode)
     {
         cost+= g->getEdgeValue(lastNode, fromNode);
-        cout << "Cost updated: " << cost << endl;
+        if(DebugLevelShortestPath > 1) cout << "Cost updated: " << cost << endl;
     }
     
     int status = q->insert(fromNode, lastNode, cost);
-    cout<< "Node: " << fromNode << " cost: " << cost << endl;
+    if(DebugLevelShortestPath > 1) cout<< "Node: " << fromNode << " cost: " << cost << endl;
 
     if (status == ReturnWarning) return ReturnWarning;
 
@@ -24,12 +24,12 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
         return ReturnSuccess;
     }
 
-    cout << "Last Node: " << lastNode << " From Node: " << fromNode << " bool: " << firstNode << endl;
+    if(DebugLevelShortestPath > 1) cout << "Last Node: " << lastNode << " From Node: " << fromNode << " bool: " << firstNode << endl;
     tmp = g->isAdjacent(fromNode, neigh[0]);
 
     while(tmp != nullptr)
     {
-        cout << "Inside " << fromNode << " neighbors." << endl;
+        if(DebugLevelShortestPath > 1) cout << "Inside " << fromNode << " neighbors." << endl;
 
         int nextNode = tmp->data->toNode->vertice;
 
@@ -37,7 +37,7 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
 
         tmp = tmp->next;
     }
-    cout << "End of " << fromNode << " neighbors." << endl;
+    if(DebugLevelShortestPath > 1) cout << "End of " << fromNode << " neighbors." << endl;
     return ReturnEndOfLoop;
 }
 
@@ -45,11 +45,7 @@ ipc::ShortestPath::ShortestPath(Graph* g, PriorityQueue* q, vector<int> v):g(g),
 
 ReturnStatus ipc::ShortestPath::path(int fromNode, int toNode)
 {
-    if ((!g->isValid(fromNode) || !g->isValid(toNode)) || !g->hasEdges(fromNode))
-    {
-        return ReturnError;
-
-    }
+    if ((!g->isValid(fromNode) || !g->isValid(toNode)) || !g->hasEdges(fromNode)) return ReturnError;
 
     int cost = 0;
 
@@ -90,8 +86,4 @@ void ipc::ShortestPath::printPath()
 
 int ipc::ShortestPath::pathCost(){ return this->cost; }
 
-ipc::ShortestPath::~ShortestPath()
-{
-    if (DebugLevelShortestPath > 0) cout << "ShortestPath Class destructor called." << endl;
-    if(q!= nullptr) delete q;
-}
+ipc::ShortestPath::~ShortestPath();
