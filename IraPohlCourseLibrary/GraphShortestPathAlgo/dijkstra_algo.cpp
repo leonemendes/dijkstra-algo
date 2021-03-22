@@ -1,5 +1,8 @@
 #include "dijkstra_algo.hpp"
 
+// Dijkstra's Algorithm Class functions ----------------------
+
+// Private ----------------------
 ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost, int lastNode, bool firstNode)
 {
     vector<int> neigh = g->neighbors(fromNode);
@@ -41,6 +44,10 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
     return ReturnEndOfLoop;
 }
 
+
+// Public ----------------------
+
+// Constructor
 ipc::ShortestPath::ShortestPath(Graph* g, PriorityQueue* q, vector<int> v):g(g), q(q), v(v), cost(0){}
 
 ReturnStatus ipc::ShortestPath::path(int fromNode, int toNode)
@@ -86,4 +93,5 @@ void ipc::ShortestPath::printPath()
 
 int ipc::ShortestPath::pathCost(){ return this->cost; }
 
-ipc::ShortestPath::~ShortestPath(){};
+// Destructor
+ipc::ShortestPath::~ShortestPath(){}
