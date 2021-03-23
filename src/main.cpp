@@ -7,6 +7,7 @@
 using ipc::Graph;
 using ipc::ShortestPath;
 using ipc::MonteCarloGraph;
+using ipc::MinSpanTree;
 
 
 int main()
@@ -93,15 +94,40 @@ int main()
     // sp.printPath();
     // cout << "Path cost:" << sp.pathCost() << endl;
 
-    MonteCarloGraph m(40, 0.2);
+    // MonteCarloGraph m(40, 0.2);
 
     // m.print();
 
-    ShortestPath sp(&m);
+    // ShortestPath sp(&m);
 
-    sp.path(0,40);
-    sp.printPath();
-    cout << "Path cost:" << sp.pathCost() << endl;
+    // sp.path(0,40);
+    // sp.printPath();
+    // cout << "Path cost:" << sp.pathCost() << endl;
+
+    Graph g(7);
+
+    g.addEdge(0,1,2);
+    g.addEdge(0,2,3);
+
+    g.addEdge(1,2,2);
+    g.addEdge(1,3,4);
+    g.addEdge(1,4,6);
+    g.addEdge(1,5,4);
+
+    g.addEdge(2,5,5);
+
+    g.addEdge(3,4,5);
+    g.addEdge(3,6,3);
+
+    g.addEdge(5,4,4);
+
+    g.addEdge(6,4,5);
+
+    g.print();
+
+    MinSpanTree mst(&g);
+
+    mst.treeGraph()->print();
 
     return 0;
 }

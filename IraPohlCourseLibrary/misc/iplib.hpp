@@ -9,20 +9,13 @@
 // Include Global defines
 #include "defs.hpp"
 
-// Using from other namespaces
-using std::cout;
-using std::endl;
-using std::ostream;
-using std::min;
-using std::vector;
-using std::find;
-
 // Library files include
 #include "linked_list.hpp"
 #include "graph.hpp"
 #include "montecarlo_graph.hpp"
 #include "priority_queue.hpp"
 #include "dijkstra_algo.hpp"
+#include "jarnikPrim_algo.hpp"
 
 
 
