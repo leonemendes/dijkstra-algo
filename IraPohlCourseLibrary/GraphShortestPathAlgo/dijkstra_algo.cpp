@@ -44,7 +44,6 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
     return ReturnEndOfLoop;
 }
 
-
 // Public ----------------------
 
 // Constructor
@@ -57,17 +56,8 @@ ReturnStatus ipc::ShortestPath::path(int fromNode, int toNode)
     int cost = 0;
 
     ipc::ShortestPath::recursivePath(fromNode, toNode, cost, fromNode);
-
-    detail::Node<detail::vertice>* tmp = q->contains(toNode);
-
-    while(tmp != nullptr)
-    {
-        v.insert(v.begin(), tmp->data->vertice);
-        if (tmp->data->vertice == fromNode) break;
-
-        tmp = q->contains(tmp->data->fromVertice);
-    }
-
+    
+    this->q->fromQueueToType(v, toNode, fromNode);
 
     return ReturnSuccess;
 }
