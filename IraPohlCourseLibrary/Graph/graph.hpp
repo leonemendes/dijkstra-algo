@@ -9,6 +9,7 @@
 #include "defs.hpp"
 #include "linked_list.hpp"
 
+
 // Using from other namespaces
 using std::vector;
 using std::cout;
@@ -46,8 +47,11 @@ namespace ipc
         ReturnStatus addEdgeSorted(detail::Node<detail::edge>* nodeToSort);
 
         public:
-        Graph(int numOfVertices = 1);
+        Graph(int numOfVertices);
 
+        Graph();
+
+        ReturnStatus init(int numOfVertices);
 
         int v();
 

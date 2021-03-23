@@ -1,9 +1,14 @@
 #ifndef PRIORITY_QUEUE_H
 #define PRIORITY_QUEUE_H
 
+// Libraries
+#include <vector>
+
 // Library headerfile
 #include "defs.hpp"
 #include "graph.hpp"
+
+using std::vector;
 
 
 namespace ipc
@@ -30,7 +35,11 @@ namespace ipc
 
         ReturnStatus insert(int v, int fromV, int val);
 
-        ReturnStatus minPriority();
+        detail::Node<detail::vertice>* minPriority();
+
+        ReturnStatus fromQueueToType(Graph* g);
+
+        ReturnStatus fromQueueToType(vector<int> &v, int toNode, int fromNode);
 
         ReturnStatus remove(int v);
         

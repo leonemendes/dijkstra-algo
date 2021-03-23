@@ -45,7 +45,7 @@ ReturnStatus ipc::PriorityQueue::insertNodeSorted(ipc::detail::Node<ipc::detail:
 
 ipc::PriorityQueue::PriorityQueue(LinkedList<ipc::detail::vertice>* head):queue(head)
 {
-    if (DebugLevel > 3) cout << "PriorityQueue Class constructor called." << endl;
+    if (DebugLevelPq > 3) cout << "PriorityQueue Class constructor called." << endl;
 }
 
 int ipc::PriorityQueue::size(){ return this->queue->size(); }
@@ -56,19 +56,19 @@ ReturnStatus ipc::PriorityQueue::chgPriority(int v, int fromV, int val, bool sma
 
     if(chgNode == nullptr)
     {
-        if (DebugLevel > 3) cout << "Vertice is not on the list." << endl;
+        if (DebugLevelPq > 3) cout << "Vertice is not on the list." << endl;
         return ReturnError;
     }
 
     if (chgNode->data->value == val)
     {
-        if (DebugLevel > 3) cout << "Value remains the same." << endl;
+        if (DebugLevelPq > 3) cout << "Value remains the same." << endl;
         return ReturnWarning;
     }  
 
     if (chgNode->data->value < val && smallest)
     {
-        if (DebugLevel > 3) cout << "Old value is smaller." << endl;
+        if (DebugLevelPq > 3) cout << "Old value is smaller." << endl;
         return ReturnWarning;
     }
 
@@ -90,13 +90,13 @@ ipc::detail::Node<ipc::detail::vertice>* ipc::PriorityQueue::contains(int v)
     {
         if (tmp->data->vertice == v)
         {
-            if (DebugLevel > 3) cout << "Vertice " << v << " found in queue." << endl;
+            if (DebugLevelPq > 3) cout << "Vertice " << v << " found in queue." << endl;
             return tmp;
         }
         if (tmp->next == nullptr) break;
         else tmp = tmp->next;
     }
-    if (DebugLevel > 1) cout << "Vertice " << v << " not found in queue." << endl;
+    if (DebugLevelPq > 1) cout << "Vertice " << v << " not found in queue." << endl;
 
     return nullptr;  
 }
@@ -110,23 +110,54 @@ ReturnStatus ipc::PriorityQueue::insert(int v, int fromV, int val)
         this->queue = new LinkedList<ipc::detail::vertice>;
         this->queue->prepend(ipc::PriorityQueue::newVertice(v, fromV, val));
 
-        if (DebugLevel > 3) cout << "PQ: First element added." << endl;
+        if (DebugLevelPq > 3) cout << "PQ: First element added." << endl;
 
         return ReturnSuccess;
     }
 
     if(ipc::PriorityQueue::contains(v) != nullptr)
     {
-        if (DebugLevel > 3) cout << "Vertice already exists. Changing priority..." << endl;
+        if (DebugLevelPq > 3) cout << "Vertice already exists. Changing priority..." << endl;
         return ipc::PriorityQueue::chgPriority(v, fromV, val);
     }
 
     return ipc::PriorityQueue::insertNodeSorted(this->queue->newNode(ipc::PriorityQueue::newVertice(v, fromV, val)));
 }
 
-ReturnStatus ipc::PriorityQueue::minPriority()
+ipc::detail::Node<ipc::detail::vertice>* ipc::PriorityQueue::minPriority()
 {
     return this->queue->popHead();
+}
+
+ReturnStatus ipc::PriorityQueue::fromQueueToType(ipc::Graph* g)
+{
+    if(g == nullptr) return ReturnError;
+
+    ipc::detail::Node<ipc::detail::vertice>* tmp = this->queue->h();
+
+    while(tmp != nullptr)
+    {
+        if (DebugLevelPq > 3) cout << "From: " << tmp->data->fromVertice << " to: " << tmp->data->vertice << " cost: " << tmp->data->value << endl;
+        g->addEdge(tmp->data->fromVertice, tmp->data->vertice, tmp->data->value);
+        tmp = tmp->next;
+    }
+    
+    return ReturnSuccess;
+}
+
+ReturnStatus ipc::PriorityQueue::fromQueueToType(vector<int> &v, int toNode, int fromNode)
+{
+    ipc::detail::Node<ipc::detail::vertice>* tmp = this->contains(toNode);
+ 
+    while(tmp != nullptr)
+    {
+        v.insert(v.begin(), tmp->data->vertice);
+        if (tmp->data->vertice == fromNode) break;
+
+        tmp = this->contains(tmp->data->fromVertice);
+    }
+
+    return ReturnSuccess;
 }
 
 ReturnStatus ipc::PriorityQueue::remove(int v)
@@ -150,7 +181,7 @@ void ipc::PriorityQueue::print()
     
     while(tmp != nullptr)
     {
-        cout << "(" << tmp->data->vertice <<"," << tmp->data->value << "), ";
+        cout << "(" << tmp->data->fromVertice <<"->" << tmp->data->vertice << ", " << tmp->data->value << "), ";
         tmp = tmp->next;
     }
     cout << endl;
@@ -158,7 +189,7 @@ void ipc::PriorityQueue::print()
 
 ipc::PriorityQueue::~PriorityQueue()
 {
-    if (DebugLevel > 3) cout << "PriorityQueue Class destructor called." << endl;
+    if (DebugLevelPq > 3) cout << "PriorityQueue Class destructor called." << endl;
 
     ipc::detail::Node<ipc::detail::vertice>* tmp = this->queue->h();
     

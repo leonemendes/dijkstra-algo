@@ -62,13 +62,19 @@ ReturnStatus ipc::Graph::addEdgeSorted(ipc::detail::Node<ipc::detail::edge>* nod
 // Public ----------------------
 
 // Constructor
-ipc::Graph::Graph(int numOfVertices):numOfVertices(numOfVertices)
+ipc::Graph::Graph(int numOfVertices):numOfVertices(numOfVertices){ ipc::Graph::init(numOfVertices); }
+
+ipc::Graph::Graph(){}
+
+ReturnStatus ipc::Graph::init(int numOfVertices)
 {
-    if (DebugLevel > 3) cout << "Class constructor called." << endl;
+    if (DebugLevel > 3) cout << "Class initialized." << endl;
+    this->numOfVertices = numOfVertices;
     ipc::Graph::initVertices(numOfVertices);
     ipc::Graph::initEdges(numOfVertices);
-}
 
+    return ReturnSuccess;
+}
 
 int ipc::Graph::v(){ return numOfVertices; }
 
