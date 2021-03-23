@@ -68,16 +68,15 @@ namespace ipc
             return ipc::LinkedList<T>::prependNode(tmp);
         }
 
-        ReturnStatus popHead()
+        detail::Node<T>* popHead()
         {
-            if(this->head == nullptr) return ReturnWarning;
+            if(this->head == nullptr) return nullptr;
             else
             {
                 detail::Node<T>* tmp = this->head;
                 ipc::LinkedList<T>::setHeadPointer(this->head->next);
-
-                delete tmp;
-                return ReturnSuccess;
+                
+                return tmp;
             }
         }
 
