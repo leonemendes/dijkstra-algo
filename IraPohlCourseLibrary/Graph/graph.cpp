@@ -62,14 +62,15 @@ ReturnStatus ipc::Graph::addEdgeSorted(ipc::detail::Node<ipc::detail::edge>* nod
 // Public ----------------------
 
 // Constructor
-ipc::Graph::Graph(int numOfVertices):numOfVertices(numOfVertices){ ipc::Graph::init(numOfVertices); }
+ipc::Graph::Graph(int numOfVertices, bool isDirected):numOfVertices(numOfVertices), isDirected(isDirected){ ipc::Graph::init(numOfVertices, isDirected); }
 
 ipc::Graph::Graph(){}
 
-ReturnStatus ipc::Graph::init(int numOfVertices)
+ReturnStatus ipc::Graph::init(int numOfVertices, bool isDirected)
 {
     if (DebugLevel > 3) cout << "Class initialized." << endl;
     this->numOfVertices = numOfVertices;
+    this->isDirected = isDirected;
     ipc::Graph::initVertices(numOfVertices);
     ipc::Graph::initEdges(numOfVertices);
 
@@ -114,8 +115,10 @@ int ipc::Graph::getEdgeValue(int fromNode, int toNode)
     else return tmp->data->cost;
 }
 
-ReturnStatus ipc::Graph::setEdgeValue(int fromNode, int toNode, int cost)
+ReturnStatus ipc::Graph::setEdgeValue(int fromNode, int toNode, int cost, bool directed)
 {
+    if(!this->isDirected && directed) ipc::Graph::setEdgeValue(toNode, fromNode, cost, false);
+
     if (!ipc::Graph::isValid(fromNode) || !ipc::Graph::isValid(toNode))
     {
         return ReturnError;
@@ -155,6 +158,7 @@ ReturnStatus ipc::Graph::setNodeValue(int fromNode, int value)
 
     if (fromNode > this->numOfVertices) return ReturnError;
     else this->vertices[fromNode].value = value;
+    if(!this->isDirected) this->vertices[this->vertices[fromNode].fromVertice].value = value; 
 
     return ReturnSuccess;
 }
@@ -195,8 +199,10 @@ ipc::detail::Node<ipc::detail::edge>* ipc::Graph::isAdjacent(int fromNode, int t
     return nullptr;
 }
 
-ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int cost)
+ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int cost, bool directed)
 {
+    if(!this->isDirected && directed) ipc::Graph::addEdge(toNode, fromNode, cost, false);
+
     if (!ipc::Graph::isValid(fromNode) || !ipc::Graph::isValid(toNode))
     {
         return ReturnError;
@@ -221,8 +227,10 @@ ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int cost)
     else return ipc::Graph::addEdgeSorted(this->edges[fromNode]->newNode(ipc::Graph::newEdge(fromNode, toNode, cost)));
 }
 
-ReturnStatus ipc::Graph::removeEdge(int fromNode, int toNode)
+ReturnStatus ipc::Graph::removeEdge(int fromNode, int toNode, bool directed)
 {
+    if(!this->isDirected && directed) ipc::Graph::removeEdge(toNode, fromNode, false);
+
     if (!ipc::Graph::isValid(fromNode) || !ipc::Graph::isValid(toNode))
     {
         return ReturnError;

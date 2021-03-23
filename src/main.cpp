@@ -104,7 +104,7 @@ int main()
     // sp.printPath();
     // cout << "Path cost:" << sp.pathCost() << endl;
 
-    Graph g(7);
+    Graph g(7, false);
 
     g.addEdge(0,1,2);
     g.addEdge(0,2,3);

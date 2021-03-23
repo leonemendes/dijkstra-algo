@@ -39,6 +39,7 @@ namespace ipc
         detail::vertice* vertices;
         LinkedList<detail::edge>** edges;
         int numOfVertices;
+        bool isDirected;
 
         void initVertices(int numOfVertices);
 
@@ -47,11 +48,11 @@ namespace ipc
         ReturnStatus addEdgeSorted(detail::Node<detail::edge>* nodeToSort);
 
         public:
-        Graph(int numOfVertices);
+        Graph(int numOfVertices, bool isDirected = true);
 
         Graph();
 
-        ReturnStatus init(int numOfVertices);
+        ReturnStatus init(int numOfVertices, bool isDirected = true);
 
         int v();
 
@@ -68,15 +69,15 @@ namespace ipc
 
         int getEdgeValue(int fromNode, int toNode);
 
-        ReturnStatus setEdgeValue(int fromNode, int toNode, int cost);
+        ReturnStatus setEdgeValue(int fromNode, int toNode, int cost, bool directed = true);
 
         detail::edge* newEdge(int fromNode, int toNode, int cost = 1);
 
         detail::Node<detail::edge>* isAdjacent(int fromNode, int toNode);
 
-        ReturnStatus addEdge(int fromNode, int toNode, int cost = 1);
+        ReturnStatus addEdge(int fromNode, int toNode, int cost = 1, bool directed = true);
 
-        ReturnStatus removeEdge(int fromNode, int toNode);
+        ReturnStatus removeEdge(int fromNode, int toNode, bool directed = true);
 
         vector<int> neighbors(int fromNode);
 
