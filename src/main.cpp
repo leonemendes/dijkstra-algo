@@ -94,46 +94,51 @@ int main()
     // sp.printPath();
     // cout << "Path cost:" << sp.pathCost() << endl;
 
-    // MonteCarloGraph m(200, 0.07);
+    MonteCarloGraph m(200, 0.07, false, true);
 
-    // m.print();
+    m.print();
 
-    // ShortestPath sp(&m);
+    ShortestPath sp(&m);
 
-    // sp.path(12,142);
-    // sp.printPath();
-    // cout << "Path cost:" << sp.pathCost() << endl;
-
-    Graph g(7, false);
-
-    g.addEdge(0,1,2);
-    g.addEdge(0,2,3);
-
-    g.addEdge(1,2,2);
-    g.addEdge(1,3,4);
-    g.addEdge(1,4,6);
-    g.addEdge(1,5,4);
-
-    g.addEdge(2,5,5);
-
-    g.addEdge(3,4,5);
-    g.addEdge(3,6,3);
-
-    g.addEdge(5,4,4);
-
-    g.addEdge(6,4,5);
-
-    g.print();
-
-    ShortestPath sp(&g);
-
-    sp.path(0,6);
+    sp.path(12,142);
     sp.printPath();
     cout << "Path cost:" << sp.pathCost() << endl;
 
-    MinSpanTree mst(&g);
+    MinSpanTree mst(&m);
 
     mst.treeGraph()->print();
+
+
+    // Graph g(7, false);
+
+    // g.addEdge(0,1,2);
+    // g.addEdge(0,2,3);
+
+    // g.addEdge(1,2,2);
+    // g.addEdge(1,3,4);
+    // g.addEdge(1,4,6);
+    // g.addEdge(1,5,4);
+
+    // g.addEdge(2,5,5);
+
+    // g.addEdge(3,4,5);
+    // g.addEdge(3,6,3);
+
+    // g.addEdge(5,4,4);
+
+    // g.addEdge(6,4,5);
+
+    // g.print();
+
+    // ShortestPath sp(&g);
+
+    // sp.path(0,6);
+    // sp.printPath();
+    // cout << "Path cost:" << sp.pathCost() << endl;
+
+    // MinSpanTree mst(&g);
+
+    // mst.treeGraph()->print();
 
     return 0;
 }

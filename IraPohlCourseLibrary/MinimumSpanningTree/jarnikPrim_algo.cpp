@@ -15,7 +15,7 @@ ipc::Graph* ipc::MinSpanTree::treeGraph(){ return this->tree; }
 ReturnStatus ipc::MinSpanTree::mst()
 {
     vector<int> neigh;
-    int v = 0, fromV;
+    int v = 0, fromV, cost;
 
     PriorityQueue* tmpQueue = new PriorityQueue;
     detail::Node<detail::vertice>* head;
@@ -35,8 +35,9 @@ ReturnStatus ipc::MinSpanTree::mst()
         head = tmpQueue->minPriority();
         v = head->data->vertice;
         fromV = head->data->fromVertice;
+        cost = head->data->value;
 
-        q->insert(v, fromV, g->getEdgeValue(fromV, v));
+        q->insert(v, fromV, cost);
 
         if(q->size() == g->v()) break;
         else neigh = g->neighbors(v);
