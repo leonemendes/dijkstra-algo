@@ -77,6 +77,8 @@ ReturnStatus ipc::Graph::init(int numOfVertices, bool isDirected)
     return ReturnSuccess;
 }
 
+bool ipc::Graph::isDirectedFlag(){ return this->isDirected; }
+
 int ipc::Graph::v(){ return numOfVertices; }
 
 bool ipc::Graph::isValid(int v)

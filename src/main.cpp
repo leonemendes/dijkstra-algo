@@ -94,13 +94,13 @@ int main()
     // sp.printPath();
     // cout << "Path cost:" << sp.pathCost() << endl;
 
-    // MonteCarloGraph m(40, 0.2);
+    // MonteCarloGraph m(200, 0.07);
 
     // m.print();
 
     // ShortestPath sp(&m);
 
-    // sp.path(0,40);
+    // sp.path(12,142);
     // sp.printPath();
     // cout << "Path cost:" << sp.pathCost() << endl;
 
@@ -124,6 +124,12 @@ int main()
     g.addEdge(6,4,5);
 
     g.print();
+
+    ShortestPath sp(&g);
+
+    sp.path(0,6);
+    sp.printPath();
+    cout << "Path cost:" << sp.pathCost() << endl;
 
     MinSpanTree mst(&g);
 

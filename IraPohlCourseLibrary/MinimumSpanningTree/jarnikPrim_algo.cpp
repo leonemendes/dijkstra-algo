@@ -15,24 +15,40 @@ ipc::Graph* ipc::MinSpanTree::treeGraph(){ return this->tree; }
 ReturnStatus ipc::MinSpanTree::mst()
 {
     vector<int> neigh;
-    
-    for(int v = 0; v < g->v(); v++)
-    {
-        vector<int> neigh = g->neighbors(v);
-        if(!neigh.empty())
-        {
-            if (DebugLevelMstJp > 1) cout << "From node: " << v << " To node: ";
+    int v = 0, fromV;
 
-            for(auto n: neigh)
-            {
-                if (DebugLevelMstJp > 1) cout << n << " ";
-                q->insert(n, v, g->getEdgeValue(v, n));
-            }
-            cout << endl;
+    PriorityQueue* tmpQueue = new PriorityQueue;
+    detail::Node<detail::vertice>* head;
+
+
+    neigh = g->neighbors(v);
+    
+    while (!neigh.empty())
+    {
+
+        for (auto n: neigh)
+        {
+            if (DebugLevelMstJp > 1) cout << "From node: " << v << " To node: " << n << endl;
+            if (!q->contains(n)) tmpQueue->insert(n, v, g->getEdgeValue(v, n));
+
         }
+        head = tmpQueue->minPriority();
+        v = head->data->vertice;
+        fromV = head->data->fromVertice;
+
+        q->insert(v, fromV, g->getEdgeValue(fromV, v));
+
+        if(q->size() == g->v()) break;
+        else neigh = g->neighbors(v);
     }
 
-    this->tree->init(this->g->v());
+    if(q->size() != g->v())
+    {
+        if (DebugLevelMstJp > 1) cout << "ERROR: Disconnected tree." << endl;
+        return ReturnError;
+    }
+
+    this->tree->init(this->g->v(), g->isDirectedFlag());
 
     this->q->fromQueueToType(this->tree);
 

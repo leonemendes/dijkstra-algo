@@ -84,16 +84,16 @@ ReturnStatus ipc::PriorityQueue::chgPriority(int v, int fromV, int val, bool sma
 
 ipc::detail::Node<ipc::detail::vertice>* ipc::PriorityQueue::contains(int v)
 {
+    if (this->queue == nullptr) return nullptr;
     ipc::detail::Node<ipc::detail::vertice>* tmp = this->queue->h();
     
-    while(true)
+    while(tmp != nullptr)
     {
         if (tmp->data->vertice == v)
         {
             if (DebugLevelPq > 3) cout << "Vertice " << v << " found in queue." << endl;
             return tmp;
         }
-        if (tmp->next == nullptr) break;
         else tmp = tmp->next;
     }
     if (DebugLevelPq > 1) cout << "Vertice " << v << " not found in queue." << endl;

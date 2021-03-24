@@ -54,6 +54,8 @@ namespace ipc
 
         ReturnStatus init(int numOfVertices, bool isDirected = true);
 
+        bool isDirectedFlag();
+
         int v();
 
         bool isValid(int v);
