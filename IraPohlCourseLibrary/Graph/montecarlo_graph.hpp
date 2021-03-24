@@ -15,13 +15,15 @@ namespace ipc
     {
         private:
         float density;
+        bool isDirected, randCost;
+        int range;
 
         ReturnStatus genMonteCarloGraph();
 
-        float prob();
+        float prob(float lowerBound = 0.0, float upperBound = 1.0);
 
         public:
-        MonteCarloGraph(int numOfVertices, float density);
+        MonteCarloGraph(int numOfVertices, float density, bool isDirected = true, bool randCost = false, int range = 0);
 
         ~MonteCarloGraph();
 
