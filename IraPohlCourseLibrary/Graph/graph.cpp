@@ -279,6 +279,7 @@ vector<int> ipc::Graph::neighbors(int fromNode)
 
 void ipc::Graph::print()
 {
+    cout << "Graph Representation:" << endl;
     for (int v = 0; v < this->numOfVertices; v++){
         cout << v << "-> ";
         if(ipc::Graph::hasEdges(v)){
