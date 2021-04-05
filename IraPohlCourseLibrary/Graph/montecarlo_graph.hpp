@@ -1,10 +1,14 @@
 #ifndef MONTECARLO_GRAPH_H
 #define MONTECARLO_GRAPH_H
 
+// Libraries
 #include <cstdlib>
 #include <ctime>
+
+// Library headerfile
 #include "graph.hpp"
 
+// Using from other namespaces
 using std::srand;
 using std::rand;
 using std::time;

@@ -83,7 +83,7 @@ int ipc::Graph::v(){ return numOfVertices; }
 
 bool ipc::Graph::isValid(int v)
 {
-    if(v >= numOfVertices)
+    if(v >= numOfVertices || v < 0)
     {
         if (DebugLevel > 1) cout << "Input node " << v << " does not exist." << endl;
         return false;           

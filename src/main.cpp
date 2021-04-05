@@ -1,17 +1,21 @@
 #include <iostream>
+#include <chrono>
 
 #include "main.hpp"
 #include "iplib.hpp"
 
 // Calling namespace library functions
+using namespace std::chrono;
+
 using ipc::Graph;
 using ipc::ShortestPath;
 using ipc::MonteCarloGraph;
 using ipc::MinSpanTree;
-
+using ipc::Hex;
 
 int main()
 {
+    auto start = high_resolution_clock::now();
     // Graph g(5);
     
     // cout << "Number of vertices: " << g.v() << endl;
@@ -94,19 +98,19 @@ int main()
     // sp.printPath();
     // cout << "Path cost:" << sp.pathCost() << endl;
 
-    MonteCarloGraph m(200, 0.07, false, true);
+    // MonteCarloGraph m(200, 0.07, false, true);
 
-    m.print();
+    // m.print();
 
-    ShortestPath sp(&m);
+    // ShortestPath sp(&m);
 
-    sp.path(12,142);
-    sp.printPath();
-    cout << "Path cost:" << sp.pathCost() << endl;
+    // sp.path(12,142);
+    // sp.printPath();
+    // cout << "Path cost:" << sp.pathCost() << endl;
 
-    MinSpanTree mst(&m);
+    // MinSpanTree mst(&m);
 
-    mst.treeGraph()->print();
+    // mst.treeGraph()->print();
 
 
     // Graph g(7, false);
@@ -139,6 +143,14 @@ int main()
     // MinSpanTree mst(&g);
 
     // mst.treeGraph()->print();
+
+    Hex board(3);
+
+    board.print();
+
+    auto stop = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(stop - start);
+    cout << "Duration time: " << duration.count() << "us" << endl;
 
     return 0;
 }

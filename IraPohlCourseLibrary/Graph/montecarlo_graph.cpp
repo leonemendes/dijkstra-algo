@@ -32,6 +32,7 @@ ReturnStatus ipc::MonteCarloGraph::genMonteCarloGraph()
 }
 
 // Public ----------------------
+
 // Constructor
 ipc::MonteCarloGraph::MonteCarloGraph(int numOfVertices, float density, bool isDirected, bool randCost, int range)
     : ipc::Graph(numOfVertices, isDirected), density(density), isDirected(isDirected), randCost(randCost), range(range)
