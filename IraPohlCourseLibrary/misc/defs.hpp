@@ -1,6 +1,8 @@
 #ifndef DEFS_H
 #define DEFS_H
 
+#include "cout_cfg.hpp"
+
 // DEBUG LEVEL
 const int DebugLevel = 0;
 const int DebugLevelShortestPath = 0;
@@ -18,6 +20,5 @@ enum ReturnStatus
     ReturnEndOfLoop = 2,
     ReturnNotFound = 3,
 };
-
 
 #endif

@@ -144,9 +144,10 @@ int main()
 
     // mst.treeGraph()->print();
 
-    Hex board(3);
+    Hex board(20);
 
-    board.print();
+    // board.print();
+    board.printBoard();
 
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);

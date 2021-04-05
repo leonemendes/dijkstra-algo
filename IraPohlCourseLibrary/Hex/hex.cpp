@@ -109,5 +109,64 @@ vector<int> ipc::Hex::neigh(int fromNode)
     return n;
 }
 
+ReturnStatus ipc::Hex::placeStone(int pos, Color c)
+{
+    return this->setNodeValue(pos, static_cast<int> (c));
+}
+
+ReturnStatus ipc::Hex::placeStone(int i, char j, Color c)
+{
+    return this->setNodeValue(this->squarePosToIndex(static_cast<int>(i - 65), j), static_cast<int> (c));
+}
+
+void ipc::Hex::printBoard()
+{
+    for(int i = 0; i < this->size + 3; i++)
+    {
+        cout << string(i, ' ');
+        for(int j = 0; j < this->size + 3; j++)
+        {
+            if(i == 0 || i == this->size + 2)
+            {
+                if(j == 1 || j == this->size + 2) cout << "   ";
+                else if(j > 2 && j < this->size + 2) cout << static_cast<char>(65 + (j - 3)) << " ";
+                else cout << " ";
+            }
+            else if(j == 0 || j == this->size + 2) 
+            {
+                cout << i - 1 << " ";
+                if(i -1 < 10) cout << " ";
+            }
+            else if(j == 1 || j == this->size + 1) cout << CoutColorStart + CoutColorBoldOn + CoutColorBlue << "o " << CoutColorEnd;
+            else if(i == 1 || i == this->size + 1)
+            {
+                if(j == 1 || j == this->size + 1) cout << "  ";
+                else cout << CoutColorStart + CoutColorBoldOn + CoutColorRed << "x " << CoutColorEnd;
+            }
+            else
+            {
+                int val = this->getNodeValue(this->squarePosToIndex(i,j));
+                switch (static_cast<Color> (val)) {
+                    case Color::None: 
+                        cout << "- ";
+                        break;
+
+                    case Color::Red: 
+                        cout << CoutColorStart + CoutColorBoldOn + CoutColorRed << "x " << CoutColorEnd;;
+                        break;
+
+                    case Color::Blue: 
+                        cout << CoutColorStart + CoutColorBoldOn + CoutColorBlue << "o " << CoutColorEnd;
+                        break;
+                    
+                    default:
+                        cout << "! ";
+                }
+            }
+        }
+        cout << endl; 
+    }
+}
+
 // Destructor
 ipc::Hex::~Hex(){};

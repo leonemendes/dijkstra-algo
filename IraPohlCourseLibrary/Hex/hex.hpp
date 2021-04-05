@@ -3,12 +3,23 @@
 
 // Libraries
 #include <utility>
+#include <iomanip>
 
 // Library headerfile
 #include "graph.hpp"
 
 // Using from other namespaces
 using std::pair;
+using std::setw;
+
+
+// Important defines
+enum class Color
+{
+    None = -1, 
+    Red = 1, 
+    Blue = 2,    
+};
 
 
 namespace ipc
@@ -34,6 +45,12 @@ namespace ipc
         ReturnStatus genBoard();
 
         vector<int> neigh(int fromNode);
+
+        ReturnStatus placeStone(int pos, Color c);
+
+        ReturnStatus placeStone(int i, char j, Color c);
+
+        void printBoard();
 
         ~Hex();
 
