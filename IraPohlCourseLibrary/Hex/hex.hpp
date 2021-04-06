@@ -4,21 +4,24 @@
 // Libraries
 #include <utility>
 #include <iomanip>
+#include <exception>
 
 // Library headerfile
 #include "graph.hpp"
 
 // Using from other namespaces
 using std::pair;
+using std::cerr;
+using std::exception;
 using std::setw;
 
 
 // Important defines
-enum class Color
+enum class HexColor
 {
     None = -1, 
-    Red = 1, 
-    Blue = 2,    
+    Blue = 1, 
+    Red = 2,    
 };
 
 
@@ -29,26 +32,30 @@ namespace ipc
         private:
         int size;
 
-        pair<int, int> indexToSquarePos(int fromNode);
-
         bool isValidSquarePos(pair<int,int> pos);
 
         int validInd(int fromNode);
+
+        public:
+        Hex(int size);
+
+        bool isValidSize(int size);
+
+        pair<int, int> indexToSquarePos(int fromNode);
 
         int squarePosToIndex(int i, int j);
 
         int squarePosToIndex(pair<int,int> p);
 
-        public:
-        Hex(int size);
+        int squarePosToIndex(pair<char,int> p);
 
         ReturnStatus genBoard();
 
         vector<int> neigh(int fromNode);
 
-        ReturnStatus placeStone(int pos, Color c);
+        ReturnStatus placeStone(int pos, HexColor c);
 
-        ReturnStatus placeStone(int i, char j, Color c);
+        ReturnStatus placeStone(pair<char,int> p, HexColor c);
 
         void printBoard();
 
