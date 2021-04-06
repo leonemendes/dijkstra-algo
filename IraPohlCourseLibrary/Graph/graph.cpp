@@ -68,7 +68,7 @@ ipc::Graph::Graph(){}
 
 ReturnStatus ipc::Graph::init(int numOfVertices, bool isDirected)
 {
-    if (DebugLevel > 3) cout << "Class initialized." << endl;
+    if (DebugLevelGraph > 3) cout << "Class initialized." << endl;
     this->numOfVertices = numOfVertices;
     this->isDirected = isDirected;
     ipc::Graph::initVertices(numOfVertices);
@@ -85,7 +85,7 @@ bool ipc::Graph::isValid(int v)
 {
     if(v >= numOfVertices || v < 0)
     {
-        if (DebugLevel > 1) cout << "Input node " << v << " does not exist." << endl;
+        if (DebugLevelGraph > 1) cout << "Input node " << v << " does not exist." << endl;
         return false;           
     }
     else return true;
@@ -95,7 +95,7 @@ bool ipc::Graph::hasEdges(int v)
 {
     if(this->edges[v] == nullptr)
     {
-        if (DebugLevel > 1) cout << "Input node has no edges." << endl;
+        if (DebugLevelGraph > 1) cout << "Input node has no edges." << endl;
         return false;           
     }
     else return true;
@@ -130,13 +130,13 @@ ReturnStatus ipc::Graph::setEdgeValue(int fromNode, int toNode, int cost, bool d
 
     if(chgNode == nullptr)
     {
-        if (DebugLevel > 3) cout << "Vertice is not on the list." << endl;
+        if (DebugLevelGraph > 3) cout << "Vertice is not on the list." << endl;
         return ReturnError;
     }
 
     if (chgNode->data->cost == cost)
     {
-        if (DebugLevel > 3) cout << "Value remains the same." << endl;
+        if (DebugLevelGraph > 3) cout << "Value remains the same." << endl;
         return ReturnWarning;
     }
     
@@ -157,10 +157,8 @@ int ipc::Graph::getNodeValue(int fromNode)
 
 ReturnStatus ipc::Graph::setNodeValue(int fromNode, int value)
 {
-
     if (fromNode > this->numOfVertices) return ReturnError;
     else this->vertices[fromNode].value = value;
-    if(!this->isDirected) this->vertices[this->vertices[fromNode].fromVertice].value = value; 
 
     return ReturnSuccess;
 }
@@ -191,13 +189,13 @@ ipc::detail::Node<ipc::detail::edge>* ipc::Graph::isAdjacent(int fromNode, int t
     {
         if (tmp->data->toNode->vertice == toNode)
         {
-            if (DebugLevel > 3) cout << "Node " << toNode << " found." << endl;
+            if (DebugLevelGraph > 3) cout << "Node " << toNode << " found." << endl;
             return tmp;
         }
         if (tmp->next == nullptr) break;
         else tmp = tmp->next;
     }
-    if (DebugLevel > 1) cout << "Node " << toNode << " not found." << endl;
+    if (DebugLevelGraph > 1) cout << "Node " << toNode << " not found." << endl;
     return nullptr;
 }
 
@@ -212,7 +210,7 @@ ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int cost, bool direct
 
     else if (ipc::Graph::isAdjacent(fromNode, toNode) != nullptr)
     {
-        if (DebugLevel > 2) cout << "WARNING: Nodes are already connected." << endl;
+        if (DebugLevelGraph > 2) cout << "WARNING: Nodes are already connected." << endl;
         return ReturnWarning;
     }
 
@@ -221,7 +219,7 @@ ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int cost, bool direct
         this->edges[fromNode] = new LinkedList<ipc::detail::edge>; 
         this->edges[fromNode]->prepend(ipc::Graph::newEdge(fromNode, toNode, cost));
 
-        if (DebugLevel > 3) cout << "First element added." << endl;
+        if (DebugLevelGraph > 3) cout << "First element added." << endl;
 
         return ReturnSuccess;
     }
@@ -242,7 +240,7 @@ ReturnStatus ipc::Graph::removeEdge(int fromNode, int toNode, bool directed)
 
     if (tmp == nullptr)
     {
-        if (DebugLevel > 2) cout << "WARNING: Nodes are already disconnected." << endl;
+        if (DebugLevelGraph > 2) cout << "WARNING: Nodes are already disconnected." << endl;
         return ReturnWarning;
     }
 
@@ -254,7 +252,7 @@ ReturnStatus ipc::Graph::removeEdge(int fromNode, int toNode, bool directed)
     }
     delete tmp;
 
-    if (DebugLevel > 3) cout << "Edge removed." << endl;
+    if (DebugLevelGraph > 3) cout << "Edge removed." << endl;
     return ReturnSuccess;
 }
 
@@ -299,7 +297,7 @@ void ipc::Graph::print()
 // Destructor
 ipc::Graph::~Graph()
 {
-    if (DebugLevel > 3) cout << "Graph Class destructor called." << endl;
+    if (DebugLevelGraph > 3) cout << "Graph Class destructor called." << endl;
 
     for (int v = 0; v < this->numOfVertices; v++)
     {
