@@ -31,17 +31,4 @@ const string CoutColorMagenta = "35m";
 const string CoutColorCyan = "36m";
 const string CoutColorWhite = "37m";
 
-
-
-enum class CoutSettingsExtra
-{
-    Reset = 0,
-    BoldOn = 1,
-    UnderlineOn = 4,
-    InverseOn = 7,
-    BoldOff = 21,
-    UnderlineOff = 24,
-    InverseOff = 27,
-};
-
 #endif
