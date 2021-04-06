@@ -121,28 +121,37 @@ ReturnStatus ipc::Hex::placeStone(int i, char j, Color c)
 
 void ipc::Hex::printBoard()
 {
-    for(int i = 0; i < this->size + 3; i++)
+    for(int i = 0; i < this->size + 4; i++)
     {
         cout << string(i, ' ');
-        for(int j = 0; j < this->size + 3; j++)
+        for(int j = 0; j < this->size + 4; j++)
         {
-            if(i == 0 || i == this->size + 2)
+            if(i == 0)
             {
-                if(j == 1 || j == this->size + 2) cout << "   ";
-                else if(j > 2 && j < this->size + 2) cout << static_cast<char>(65 + (j - 3)) << " ";
-                else cout << " ";
+                if(j <= 2 || j >= this->size + 3) cout << "  ";
+                else cout << static_cast<char>(65 + (j - 3)) << " ";
             }
-            else if(j == 0 || j == this->size + 2) 
+            else if(i == this->size + 3)
+            {
+                if(j <= 2 || j >= this->size + 3) cout << " ";
+                else cout << static_cast<char>(65 + (j - 3)) << " ";
+            }
+            else if((j == 0 || j == this->size + 3) && i > 1 && i < this->size + 2) 
             {
                 cout << i - 1 << " ";
                 if(i -1 < 10) cout << " ";
             }
-            else if(j == 1 || j == this->size + 1) cout << CoutColorStart + CoutColorBoldOn + CoutColorBlue << "o " << CoutColorEnd;
-            else if(i == 1 || i == this->size + 1)
+            else if(i == 1)
             {
-                if(j == 1 || j == this->size + 1) cout << "  ";
+                if(j <= 2 || j >= this->size + 3) cout << "  ";
                 else cout << CoutColorStart + CoutColorBoldOn + CoutColorRed << "x " << CoutColorEnd;
             }
+            else if(i == this->size + 2)
+            {
+                if(j < 2 || j >= this->size + 2) cout << "  ";
+                else cout << CoutColorStart + CoutColorBoldOn + CoutColorRed << "x " << CoutColorEnd;
+            }
+            else if(j == 1 || j == this->size + 2) cout << CoutColorStart + CoutColorBoldOn + CoutColorBlue << "o " << CoutColorEnd;
             else
             {
                 int val = this->getNodeValue(this->squarePosToIndex(i,j));

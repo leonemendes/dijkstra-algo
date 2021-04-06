@@ -144,7 +144,7 @@ int main()
 
     // mst.treeGraph()->print();
 
-    Hex board(20);
+    Hex board(21);
 
     // board.print();
     board.printBoard();
