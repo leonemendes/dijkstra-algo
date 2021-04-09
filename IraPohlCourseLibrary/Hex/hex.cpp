@@ -337,7 +337,7 @@ ReturnStatus ipc::Hex::smartMove(detail::HexColor p, ipc::detail::PcLevel level)
             tries++;
         }
         pos = this->indexToSquarePos(randPosInd);
-        cout << "PC plays: " << static_cast<char>(pos.second + 65)  << pos.first << endl;
+        cout << "PC randomly plays: " << static_cast<char>(pos.second + 65)  << pos.first << endl;
         
         break;
 
@@ -351,7 +351,7 @@ ReturnStatus ipc::Hex::smartMove(detail::HexColor p, ipc::detail::PcLevel level)
                 int half = this->size/2;
                 pos.first = half + tries;
                 pos.second = half + tries;
-                cout << "PC plays: " << static_cast<char>(pos.second + 65)  << pos.first << endl;
+                cout << "PC randomly plays: " << static_cast<char>(pos.second + 65)  << pos.first << endl;
                 status = this->placeStone(pos, p);
                 tries ++;
             }
@@ -362,15 +362,15 @@ ReturnStatus ipc::Hex::smartMove(detail::HexColor p, ipc::detail::PcLevel level)
             int ind;
             while(status != ReturnSuccess)
             {
-                if(tries == 1) colors.push_back(static_cast<int>(p));
-                if(tries == 2) return this->smartMove(p, ipc::detail::PcLevel::Dumb);
+                if(tries == 2) colors.push_back(static_cast<int>(p));
+                if(tries == 3) return this->smartMove(p, ipc::detail::PcLevel::Dumb);
     
                 vector<int> winStatus = this->isWinner(this->playerSelect(p)->lastMove, colors);
                 if(!winStatus.empty())
                 {
                     if(winStatus.size() > 1) ind = winStatus[1];
                     else ind = winStatus[0];
-                    status = this->placeStone(pos, p);
+                    status = this->placeStone(ind, p);
                 }
                 tries ++;
             }
