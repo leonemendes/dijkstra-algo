@@ -4,13 +4,13 @@
 // Graph Class functions ----------------------
 
 // Private ----------------------
-void ipc::Graph::initVertices(int numOfVertices)
+void ipc::Graph::initVertices(int numOfVertices, int cost)
 {
     this->vertices = new ipc::detail::vertice[numOfVertices];
 
     for(int v = 0; v < numOfVertices; v++)
     {
-        this->vertices[v] = {v, -1, -1}; 
+        this->vertices[v] = {v, -1, cost}; 
     }
 }
 
@@ -62,16 +62,16 @@ ReturnStatus ipc::Graph::addEdgeSorted(ipc::detail::Node<ipc::detail::edge>* nod
 // Public ----------------------
 
 // Constructor
-ipc::Graph::Graph(int numOfVertices, bool isDirected):numOfVertices(numOfVertices), isDirected(isDirected){ ipc::Graph::init(numOfVertices, isDirected); }
+ipc::Graph::Graph(int numOfVertices, int verticeBaseCost, bool isDirected):numOfVertices(numOfVertices), isDirected(isDirected){ ipc::Graph::init(numOfVertices, verticeBaseCost, isDirected); }
 
 ipc::Graph::Graph(){}
 
-ReturnStatus ipc::Graph::init(int numOfVertices, bool isDirected)
+ReturnStatus ipc::Graph::init(int numOfVertices, int verticeBaseCost, bool isDirected)
 {
     if (DebugLevelGraph > 3) cout << "Class initialized." << endl;
     this->numOfVertices = numOfVertices;
     this->isDirected = isDirected;
-    ipc::Graph::initVertices(numOfVertices);
+    ipc::Graph::initVertices(numOfVertices, verticeBaseCost);
     ipc::Graph::initEdges(numOfVertices);
 
     return ReturnSuccess;

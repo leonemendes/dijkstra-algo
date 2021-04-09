@@ -41,18 +41,18 @@ namespace ipc
         int numOfVertices;
         bool isDirected;
 
-        void initVertices(int numOfVertices);
+        void initVertices(int numOfVertices, int cost = -1);
 
         void initEdges(int numOfVertices);
 
         ReturnStatus addEdgeSorted(detail::Node<detail::edge>* nodeToSort);
 
         public:
-        Graph(int numOfVertices, bool isDirected = true);
+        Graph(int numOfVertices, int verticeBaseCost = -1, bool isDirected = true);
 
         Graph();
 
-        ReturnStatus init(int numOfVertices, bool isDirected = true);
+        ReturnStatus init(int numOfVertices, int verticeBaseCost = -1, bool isDirected = true);
 
         bool isDirectedFlag();
 
