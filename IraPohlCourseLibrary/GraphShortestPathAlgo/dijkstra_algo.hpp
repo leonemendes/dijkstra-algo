@@ -4,6 +4,8 @@
 // Libraries
 #include <iostream>
 #include <vector>
+#include <algorithm>
+
 
 // Library headerfile
 #include "defs.hpp"
@@ -13,6 +15,7 @@
 using std::vector;
 using std::cout;
 using std::endl;
+using std::find;
 
 namespace ipc
 {
@@ -20,18 +23,16 @@ namespace ipc
     {
         private:
         Graph* g;
-        PriorityQueue* q;
-        vector<int> v;
+        bool pathFound;
         int cost;
 
-        ReturnStatus recursivePath(int fromNode, int toNode, int cost, int lastNode, bool firstNode = true);
+        ReturnStatus recursivePath(PriorityQueue* q, PriorityQueue* tmpQ, int fromNode, int toNode, int cost, int lastNode, vector<int> specificCost, bool firstNode = true);
 
         public:
-        ShortestPath(Graph* g, PriorityQueue* q = new PriorityQueue, vector<int> v = {});
+        vector<int> v;
+        ShortestPath(Graph* g, vector<int> v = {});
 
-        ReturnStatus path(int fromNode, int toNode);
-
-        void printQueue();
+        ReturnStatus path(int fromNode, int toNode, vector<int> specificCost = {-1});
 
         void printPath();
 

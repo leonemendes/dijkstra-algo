@@ -3,18 +3,26 @@
 // Dijkstra's Algorithm Class functions ----------------------
 
 // Private ----------------------
-ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost, int lastNode, bool firstNode)
+ReturnStatus ipc::ShortestPath::recursivePath(PriorityQueue* q, PriorityQueue* tmpQ, int fromNode, int toNode, int cost, int lastNode, vector<int> specificCost, bool firstNode)
 {
     vector<int> neigh = g->neighbors(fromNode);
     if(neigh.empty()) return ReturnEndOfLoop;
 
     detail::Node<detail::edge>* tmp;
 
+    int tmpCost = (!specificCost.empty()) ? g->getNodeValue(fromNode) : g->getEdgeValue(lastNode, fromNode);
+
     if(!firstNode)
     {
-        cost+= g->getEdgeValue(lastNode, fromNode);
+        if(!specificCost.empty() && (find(specificCost.begin(), specificCost.end(), tmpCost) == specificCost.end()))
+        {
+            if(DebugLevelShortestPath > 1) cout << "Node " << fromNode << " does not match specific cost " << endl;
+            return ReturnEndOfLoop;
+        }
+        cost+= tmpCost;
         if(DebugLevelShortestPath > 1) cout << "Cost updated: " << cost << endl;
     }
+
     
     int status = q->insert(fromNode, lastNode, cost);
     if(DebugLevelShortestPath > 1) cout<< "Node: " << fromNode << " cost: " << cost << endl;
@@ -24,6 +32,8 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
     if(fromNode == toNode)
     {
         this->cost = cost;
+        this->pathFound = true;
+        if(DebugLevelShortestPath > 1) cout << "Found a path." << endl;
         return ReturnSuccess;
     }
 
@@ -32,39 +42,46 @@ ReturnStatus ipc::ShortestPath::recursivePath(int fromNode, int toNode, int cost
 
     while(tmp != nullptr)
     {
-        if(DebugLevelShortestPath > 1) cout << "Inside " << fromNode << " neighbors." << endl;
 
         int nextNode = tmp->data->toNode->vertice;
 
-        if(recursivePath(nextNode, toNode, cost, fromNode, false) == ReturnSuccess) break;
+        if(DebugLevelShortestPath > 1) cout << "Inside " << fromNode << " neighbors: " << nextNode << endl;
+
+        if(recursivePath(q, tmpQ, nextNode, toNode, cost, fromNode, specificCost, false) == ReturnSuccess) break;
 
         tmp = tmp->next;
     }
     if(DebugLevelShortestPath > 1) cout << "End of " << fromNode << " neighbors." << endl;
+    tmpQ->insert(fromNode,-1,-1);
     return ReturnEndOfLoop;
 }
 
 // Public ----------------------
 
 // Constructor
-ipc::ShortestPath::ShortestPath(Graph* g, PriorityQueue* q, vector<int> v):g(g), q(q), v(v), cost(0){}
+ipc::ShortestPath::ShortestPath(Graph* g, vector<int> v):g(g), pathFound(false), cost(0), v(v){}
 
-ReturnStatus ipc::ShortestPath::path(int fromNode, int toNode)
+ReturnStatus ipc::ShortestPath::path(int fromNode, int toNode, vector<int> specificCost)
 {
     if ((!g->isValid(fromNode) || !g->isValid(toNode)) || !g->hasEdges(fromNode)) return ReturnError;
 
     int cost = 0;
 
-    ipc::ShortestPath::recursivePath(fromNode, toNode, cost, fromNode);
+    PriorityQueue* q = new PriorityQueue;
+    PriorityQueue* tmpQ = new PriorityQueue;
+
+    ipc::ShortestPath::recursivePath(q, tmpQ, fromNode, toNode, cost, fromNode, specificCost);
     
-    this->q->fromQueueToType(v, toNode, fromNode);
-
-    return ReturnSuccess;
-}
-
-void ipc::ShortestPath::printQueue()
-{
-    if(q != nullptr) q->print();
+    if(this->pathFound)
+    {
+        if(DebugLevelShortestPath > 1) cout << "Shortest path found!" << endl;
+        this->v.clear();
+        q->fromQueueToType(this->v, toNode, fromNode);
+        this->pathFound = false;
+        return ReturnSuccess;
+    }
+    if(DebugLevelShortestPath > 1) cout << "Shortest path not found!" << endl;
+    return ReturnNotFound;
 }
 
 void ipc::ShortestPath::printPath()
