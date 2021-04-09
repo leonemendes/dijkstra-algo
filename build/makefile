@@ -9,7 +9,7 @@ TARGET ?= main.exe
 VERBOSE ?= FALSE
 
 # Create the list of directories
-DIRS = src IraPohlCourseLibrary/misc IraPohlCourseLibrary/LinkedList IraPohlCourseLibrary/Graph IraPohlCourseLibrary/PriorityQueue IraPohlCourseLibrary/GraphShortestPathAlgo IraPohlCourseLibrary/Hex IraPohlCourseLibrary/MinimumSpanningTree
+DIRS = src IraPohlCourseLibrary/ProbFunctions IraPohlCourseLibrary/misc IraPohlCourseLibrary/LinkedList IraPohlCourseLibrary/Graph IraPohlCourseLibrary/PriorityQueue IraPohlCourseLibrary/GraphShortestPathAlgo IraPohlCourseLibrary/Hex IraPohlCourseLibrary/MinimumSpanningTree
 SOURCEDIRS ?= $(foreach dir, $(DIRS), $(addprefix $(PROJDIR)/, $(dir)))
 TARGETDIRS ?= $(foreach dir, $(DIRS), $(addprefix $(BUILDDIR)/, $(dir)))
 
