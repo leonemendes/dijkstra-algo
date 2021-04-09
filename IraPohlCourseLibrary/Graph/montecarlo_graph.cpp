@@ -3,26 +3,18 @@
 // MonteCarloGraph Class functions ----------------------
 
 // Private ----------------------
-float ipc::MonteCarloGraph::prob(float lowerBound, float upperBound)
-{
-    return lowerBound + static_cast <float> (rand())/ (static_cast <float> (RAND_MAX/(upperBound - lowerBound)));
-}
-
 ReturnStatus ipc::MonteCarloGraph::genMonteCarloGraph()
 {
     int v = this->v();
     int cost = 1;
 
-    srand(time(0));
-
-
     for(int fromNode = 0; fromNode < v; fromNode++)
     {
         for(int toNode = 0; toNode < v; toNode++)
         {
-            if(fromNode != toNode && this->isAdjacent(fromNode, toNode) == nullptr && ipc::MonteCarloGraph::prob() < this->density)
+            if(fromNode != toNode && this->isAdjacent(fromNode, toNode) == nullptr && ProbFunctions::prob() < this->density)
             {
-                if (this->randCost) cost = static_cast<int> (prob(1,10));
+                if (this->randCost) cost = static_cast<int> (ProbFunctions::randNum(1,10));
                 this->addEdge(fromNode, toNode, cost);
             }
         }

@@ -7,8 +7,10 @@
 
 // Library headerfile
 #include "graph.hpp"
+#include "prob_functions.hpp"
 
 // Using from other namespaces
+using namespace ipc::ProbFunctions;
 using std::srand;
 using std::rand;
 using std::time;
@@ -23,8 +25,6 @@ namespace ipc
         int range;
 
         ReturnStatus genMonteCarloGraph();
-
-        float prob(float lowerBound = 0.0, float upperBound = 1.0);
 
         public:
         MonteCarloGraph(int numOfVertices, float density, bool isDirected = true, bool randCost = false, int range = 0);
