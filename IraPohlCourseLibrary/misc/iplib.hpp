@@ -17,6 +17,7 @@
 #include "dijkstra_algo.hpp"
 #include "hex.hpp"
 #include "jarnikPrim_algo.hpp"
+#include "prob_functions.hpp"
 
 
 
