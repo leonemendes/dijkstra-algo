@@ -139,6 +139,8 @@ pair<vector<int>, int> ipc::ShortestPath::aStarHex(ipc::Graph* g, int fromNode, 
     unordered_map<int, int> cameFrom;
     unordered_map<int, int> costSoFar;
 
+    int finalCost = -1;
+
     cameFrom[fromNode] = fromNode;
     costSoFar[fromNode] = 0;
 
@@ -163,7 +165,9 @@ pair<vector<int>, int> ipc::ShortestPath::aStarHex(ipc::Graph* g, int fromNode, 
             
             if(find(validNodes.begin(), validNodes.end(), g->cost(nextNode)) != validNodes.end())
             {
-                int newCost = costSoFar[currentNode] + g->cost(currentNode, nextNode) ;
+                int nextCost = g->cost(nextNode);
+                nextCost = (nextCost != 1) ? 0 : nextCost;
+                int newCost = costSoFar[currentNode] + nextCost;
                 if (DebugLevelShortestPath > 1) cout << "New Cost: " << newCost << endl;
 
                 if(costSoFar.find(nextNode) == costSoFar.end() || newCost < costSoFar[nextNode])
@@ -172,11 +176,12 @@ pair<vector<int>, int> ipc::ShortestPath::aStarHex(ipc::Graph* g, int fromNode, 
                     int priority = newCost + ipc::ShortestPath::heuristic(nextNode, toNode, g->v());
                     frontier.insert(nextNode, currentNode, priority);
                     cameFrom[nextNode] = currentNode;
+                    finalCost = priority;
                 }
             }
         }
     }
-    return (pathFound) ? make_pair(ipc::ShortestPath::buildPath(cameFrom, fromNode, toNode), costSoFar[toNode]) : make_pair(vector<int>(), -1);
+    return (pathFound) ? make_pair(ipc::ShortestPath::buildPath(cameFrom, fromNode, toNode), finalCost) : make_pair(vector<int>(), -1);
 }
 
 void ipc::ShortestPath::printPath(vector<int> v)
