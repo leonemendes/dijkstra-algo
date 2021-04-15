@@ -17,16 +17,16 @@ void ipc::Hex::initPlayers()
 {
     this->player = new ipc::detail::Player[2];
     this->player[0] = {.color = ipc::detail::HexColor::Blue, .isPlayerPc = false,
-     .level = ipc::detail::PcLevel::Null, .lastMove = -1, .touched = ::ipc::detail::BoardSide::None};
+     .level = ipc::detail::PcLevel::Null, .movements = {}, .touched = ::ipc::detail::BoardSide::None};
     this->player[1] = {.color = ipc::detail::HexColor::Red, .isPlayerPc = false,
-     .level = ipc::detail::PcLevel::Null, .lastMove = -1, .touched = ::ipc::detail::BoardSide::None};
+     .level = ipc::detail::PcLevel::Null, .movements = {}, .touched = ::ipc::detail::BoardSide::None};
 }
 
 pair<vector<int>,int> ipc::Hex::minPathToSide(int fromNode, ipc::detail::BoardSide side, vector<int> colors)
 {
     pair<vector<int>,int> pathNCost;
     pathNCost.first = {};
-    pathNCost.second = 10000;
+    pathNCost.second = 10000;                   // just a big number
     ipc::detail::HexColor avoid = (this->nodeColor(fromNode) == ipc::detail::HexColor::Blue) ? ipc::detail::HexColor::Red : ipc::detail::HexColor::Blue;
 
     if(side == ipc::detail::BoardSide::None) side = ipc::Hex::closestSide(fromNode);
@@ -38,7 +38,7 @@ pair<vector<int>,int> ipc::Hex::minPathToSide(int fromNode, ipc::detail::BoardSi
         if(DebugLevelHex > 3) cout << "Looking for path between " << fromNode << " and " << toNode << "..." << endl;
         if(this->nodeColor(toNode) != avoid)
         {
-            pair<vector<int>,int> tmpDijkstra = ipc::ShortestPath::dijkstraHex(dynamic_cast<ipc::Graph*>(this), fromNode, toNode, colors);
+            pair<vector<int>,int> tmpDijkstra = ipc::ShortestPath::aStarHex(dynamic_cast<ipc::Graph*>(this), fromNode, toNode, colors);
             if(!tmpDijkstra.first.empty() && tmpDijkstra.second < pathNCost.second)
             {
                 pathNCost = tmpDijkstra;
@@ -183,6 +183,14 @@ int ipc::Hex::squarePosToIndex(pair<char,int> p)
     return p.second * this->size + static_cast<int>(p.first - 65);
 }
 
+int ipc::Hex::heuristic(int fromNode, int toNode)
+{
+    pair<int,int> fNode = this->indexToSquarePos(fromNode);
+    pair<int,int> tNode = this->indexToSquarePos(toNode);
+
+    return abs(tNode.first - fNode.first) + abs(tNode.second - fNode.second);
+}
+
 ReturnStatus ipc::Hex::genBoard()
 {
     try
@@ -276,7 +284,7 @@ ReturnStatus ipc::Hex::placeStone(int pos, ipc::detail::HexColor c)
     if(status == ReturnSuccess)
     {
         ipc::detail::BoardSide side = this->nodeSide(pos);
-        this->playerSelect(c)->lastMove = pos;
+        this->playerSelect(c)->movements.push_back(pos);
         if(this->isPlayerSide(c, side)) this->playerSelect(c)->touched = side;
         this->isWinner(pos);
     }
@@ -290,7 +298,7 @@ ReturnStatus ipc::Hex::placeStone(pair<char,int> p, ipc::detail::HexColor c)
     if(status == ReturnSuccess)
     {
         ipc::detail::BoardSide side = this->nodeSide(this->squarePosToIndex(p));
-        this->playerSelect(c)->lastMove = this->squarePosToIndex(p);
+        this->playerSelect(c)->movements.push_back(this->squarePosToIndex(p));
         if(this->isPlayerSide(c, side)) this->playerSelect(c)->touched = side;
         this->isWinner(this->squarePosToIndex(p));
     }
@@ -304,7 +312,7 @@ ReturnStatus ipc::Hex::placeStone(pair<int,int> p, ipc::detail::HexColor c)
     if(status == ReturnSuccess)
     {
         ipc::detail::BoardSide side = this->nodeSide(this->squarePosToIndex(p));
-        this->playerSelect(c)->lastMove = this->squarePosToIndex(p);
+        this->playerSelect(c)->movements.push_back(this->squarePosToIndex(p));
         if(this->isPlayerSide(c, side)) this->playerSelect(c)->touched = side;
         this->isWinner(this->squarePosToIndex(p));
     }
@@ -338,8 +346,8 @@ ReturnStatus ipc::Hex::smartMove(detail::HexColor p, ipc::detail::PcLevel level)
 
     case ipc::detail::PcLevel::Easy:
         if(DebugLevelHex > 2) cout << "Easy movement" << endl;
-        
-        if(this->playerSelect(p)->lastMove == -1)
+
+        if(this->playerSelect(p)->movements.empty())
         {
             this->playerSelect(p)->touched = ipc::detail::BoardSide::None;
 
@@ -359,14 +367,22 @@ ReturnStatus ipc::Hex::smartMove(detail::HexColor p, ipc::detail::PcLevel level)
             int ind;
             while(status != ReturnSuccess)
             {
-                if(tries == 2) colors.push_back(static_cast<int>(p));
+                colors.push_back(static_cast<int>(p));
                 if(tries == 3) return this->smartMove(p, ipc::detail::PcLevel::Dumb);
     
-                vector<int> winStatus = this->isWinner(this->playerSelect(p)->lastMove, colors);
-                if(!winStatus.empty())
+                vector<int> winSeq = this->isWinner(this->playerSelect(p)->movements.back(), colors);
+                if(!winSeq.empty())
                 {
-                    if(winStatus.size() > 1) ind = winStatus[1];
-                    else ind = winStatus[0];
+                    ind = winSeq[0];
+
+                    for(auto nextStep : winSeq)
+                    {
+                        if(find(this->playerSelect(p)->movements.begin(), this->playerSelect(p)->movements.end(), nextStep) == this->playerSelect(p)->movements.end())
+                        {
+                            ind = nextStep;
+                            break;
+                        }
+                    }
                     status = this->placeStone(ind, p);
                 }
                 tries ++;
@@ -448,6 +464,31 @@ vector<int> ipc::Hex::isWinner(int fromNode, vector<int> colors)
     }
 
     return minPath;
+}
+
+void ipc::Hex::gameReport()
+{
+    cout << CoutColorStart + CoutColorBoldOn + CoutColorBlue << "Player 1 made " << this->playerSelect(ipc::detail::HexColor::Blue)->movements.size() << " movements: " << endl;
+    ipc::Hex::printPath(this->playerSelect(ipc::detail::HexColor::Blue)->movements);
+    cout << CoutColorEnd;
+
+    cout <<  CoutColorStart + CoutColorBoldOn + CoutColorRed << "Player 2 made " << this->playerSelect(ipc::detail::HexColor::Red)->movements.size() << " movements: " << endl;
+    ipc::Hex::printPath(this->playerSelect(ipc::detail::HexColor::Red)->movements);
+    cout << CoutColorEnd;
+}
+
+void ipc::Hex::printPath(vector<int> v)
+{
+    if(v.empty()) return;
+
+    cout<< "Player path: ";
+    
+    for(auto x: v)
+    {
+        cout << x;
+        if (x != v.back()) cout << "->";
+    }
+    cout << endl;
 }
 
 void ipc::Hex::printBoard()

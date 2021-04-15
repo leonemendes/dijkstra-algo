@@ -6,11 +6,13 @@
 #include <iomanip>
 #include <exception>
 #include <string>
+#include <cstdlib>          // abs
+
 
 
 // Library headerfile
 #include "graph.hpp"
-#include "dijkstra_algo.hpp"
+#include "sp_algo.hpp"
 #include "prob_functions.hpp"
 
 // Using from other namespaces
@@ -19,6 +21,7 @@ using std::cerr;
 using std::exception;
 using std::setw;
 using std::string;
+using std::abs;
 
 
 
@@ -57,7 +60,7 @@ namespace ipc
             HexColor color;
             bool isPlayerPc;
             PcLevel level;
-            int lastMove;
+            vector<int> movements;
             BoardSide touched;
         };
 
@@ -107,6 +110,8 @@ namespace ipc
 
         int squarePosToIndex(pair<char,int> p);
 
+        int heuristic(int fromNode, int toNode);
+
         ReturnStatus genBoard();
 
         vector<int> neigh(int fromNode);
@@ -122,6 +127,10 @@ namespace ipc
         ReturnStatus smartMove(detail::HexColor player, detail::PcLevel level = detail::PcLevel::Null);
 
         vector<int> isWinner(int fromNode, vector<int> colors = {static_cast<int>(ipc::detail::HexColor::Null)});
+
+        void gameReport();
+
+        void printPath(vector<int> v);
 
         void printBoard();
 
