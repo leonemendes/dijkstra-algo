@@ -68,8 +68,6 @@ namespace ipc
         private:
         int size;
         detail::HexColor winner;
-        ShortestPath* sp;
-
 
         bool isValidSquarePos(pair<int,int> pos);
 
@@ -95,7 +93,7 @@ namespace ipc
 
         public:
         bool endGame;
-        ipc::detail::Player* player;
+        detail::Player* player;
 
         Hex(int size);
 
@@ -124,8 +122,6 @@ namespace ipc
         ReturnStatus smartMove(detail::HexColor player, detail::PcLevel level = detail::PcLevel::Null);
 
         vector<int> isWinner(int fromNode, vector<int> colors = {static_cast<int>(ipc::detail::HexColor::Null)});
-
-        void printMinPath();
 
         void printBoard();
 
