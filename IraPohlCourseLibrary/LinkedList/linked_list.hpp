@@ -54,7 +54,7 @@ namespace ipc
         {
             n->next = this->head;
             if (this->head != nullptr) this->head->prev = n;
-            ipc::LinkedList<T>::setHeadPointer(n);
+            this->setHeadPointer(n);
 
             if (DebugLevel > 3) cout << "Node added." << endl;
 
@@ -63,7 +63,7 @@ namespace ipc
 
         ReturnStatus prepend(T* n)
         {
-            detail::Node<T>* tmp = ipc::LinkedList<T>::newNode(n);
+            detail::Node<T>* tmp = this->newNode(n);
 
             return ipc::LinkedList<T>::prependNode(tmp);
         }
@@ -74,7 +74,7 @@ namespace ipc
             else
             {
                 detail::Node<T>* tmp = this->head;
-                ipc::LinkedList<T>::setHeadPointer(this->head->next);
+                this->setHeadPointer(this->head->next);
                 
                 return tmp;
             }
