@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
+#include <utility>
 
 
 // Library headerfile
@@ -16,30 +18,21 @@ using std::vector;
 using std::cout;
 using std::endl;
 using std::find;
+using std::unordered_map;
+using std::pair;
 
 namespace ipc
 {
-    class ShortestPath
+    namespace ShortestPath
     {
-        private:
-        Graph* g;
-        bool pathFound;
-        int cost;
+        vector<int> buildPath(unordered_map<int, int> cameFrom, int fromNode, int toNode);
 
-        ReturnStatus recursivePath(PriorityQueue* q, PriorityQueue* tmpQ, int fromNode, int toNode, int cost, int lastNode, vector<int> specificCost, bool firstNode = true);
+        pair<vector<int>, int> dijkstra(ipc::Graph* g, int fromNode, int toNode);
 
-        public:
-        vector<int> v;
-        ShortestPath(Graph* g, vector<int> v = {});
+        pair<vector<int>, int> dijkstraHex(ipc::Graph* g, int fromNode, int toNode, vector<int> validNodes);
 
-        ReturnStatus path(int fromNode, int toNode, vector<int> specificCost = {-1});
-
-        void printPath();
-
-        int pathCost();
-
-        ~ShortestPath();
-    };
+        void printPath(vector<int> v);
+    }
 }
 
 
