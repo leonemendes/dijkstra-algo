@@ -29,7 +29,7 @@ ReturnStatus ipc::MinSpanTree::mst()
         for (auto n: neigh)
         {
             if (DebugLevelMstJp > 1) cout << "From node: " << v << " To node: " << n << endl;
-            if (!q->contains(n)) tmpQueue->insert(n, v, g->getEdgeValue(v, n));
+            if (!q->contains(n)) tmpQueue->insert(n, v, g->cost(v, n));
 
         }
         head = tmpQueue->minPriority();

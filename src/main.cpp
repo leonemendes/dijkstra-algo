@@ -13,7 +13,6 @@ using std::streamsize;
 using namespace std::chrono;
 
 using ipc::Graph;
-using ipc::ShortestPath;
 using ipc::MonteCarloGraph;
 using ipc::MinSpanTree;
 using ipc::Hex;
@@ -62,7 +61,7 @@ int main()
         else if (pcAgainstPc && player == ipc::detail::HexColor::Blue)
         {
             cout << endl;
-            board.smartMove(player, ipc::detail::PcLevel::Easy);
+            board.smartMove(player, ipc::detail::PcLevel::Dumb);
             player = ipc::detail::HexColor::Red;
 
         }
