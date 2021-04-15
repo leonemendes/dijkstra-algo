@@ -4,13 +4,13 @@
 // Graph Class functions ----------------------
 
 // Private ----------------------
-void ipc::Graph::initVertices(int numOfVertices, int cost)
+void ipc::Graph::initVertices(int numOfVertices, int value)
 {
     this->vertices = new ipc::detail::vertice[numOfVertices];
 
     for(int v = 0; v < numOfVertices; v++)
     {
-        this->vertices[v] = {v, -1, cost}; 
+        this->vertices[v] = {v, -1, value}; 
     }
 }
 
@@ -32,7 +32,7 @@ ReturnStatus ipc::Graph::addEdgeSorted(ipc::detail::Node<ipc::detail::edge>* nod
 
     while(tmp != nullptr)
     {
-        if(nodeToSort->data->cost < tmp->data->cost)
+        if(nodeToSort->data->value < tmp->data->value)
         {
             if(tmp == this->edges[nodeToSort->data->fromNode->vertice]->h()) this->edges[nodeToSort->data->fromNode->vertice]->prependNode(nodeToSort);
             else
@@ -109,17 +109,17 @@ int ipc::Graph::e(int fromNode)
 }
 
 
-int ipc::Graph::getEdgeValue(int fromNode, int toNode)
+int ipc::Graph::cost(int fromNode, int toNode)
 {
     ipc::detail::Node<ipc::detail::edge>* tmp = ipc::Graph::isAdjacent(fromNode, toNode);
 
     if (tmp == nullptr) return ReturnError;
-    else return tmp->data->cost;
+    else return tmp->data->value;
 }
 
-ReturnStatus ipc::Graph::setEdgeValue(int fromNode, int toNode, int cost, bool directed)
+ReturnStatus ipc::Graph::setEdgeValue(int fromNode, int toNode, int value, bool directed)
 {
-    if(!this->isDirected && directed) ipc::Graph::setEdgeValue(toNode, fromNode, cost, false);
+    if(!this->isDirected && directed) ipc::Graph::setEdgeValue(toNode, fromNode, value, false);
 
     if (!ipc::Graph::isValid(fromNode) || !ipc::Graph::isValid(toNode))
     {
@@ -134,13 +134,13 @@ ReturnStatus ipc::Graph::setEdgeValue(int fromNode, int toNode, int cost, bool d
         return ReturnError;
     }
 
-    if (chgNode->data->cost == cost)
+    if (chgNode->data->value == value)
     {
         if (DebugLevelGraph > 3) cout << "Value remains the same." << endl;
         return ReturnWarning;
     }
     
-    chgNode->data->cost = cost;
+    chgNode->data->value = value;
     if(chgNode->prev != nullptr) chgNode->prev->next = chgNode->next;
     else this->edges[fromNode]->setHeadPointer(chgNode->next);
 
@@ -149,7 +149,7 @@ ReturnStatus ipc::Graph::setEdgeValue(int fromNode, int toNode, int cost, bool d
     return ipc::Graph::addEdgeSorted(chgNode);
 }
 
-int ipc::Graph::getNodeValue(int fromNode)
+int ipc::Graph::cost(int fromNode)
 {
     if (!ipc::Graph::isValid(fromNode)) return ReturnError;
     else return this->vertices[fromNode].value;
@@ -163,9 +163,9 @@ ReturnStatus ipc::Graph::setNodeValue(int fromNode, int value)
     return ReturnSuccess;
 }
 
-ipc::detail::edge* ipc::Graph::newEdge(int fromNode, int toNode, int cost)
+ipc::detail::edge* ipc::Graph::newEdge(int fromNode, int toNode, int value)
 {
-    ipc::detail::edge* newEdge = new ipc::detail::edge {.fromNode = &this->vertices[fromNode], .toNode = &this->vertices[toNode],  .cost = cost};
+    ipc::detail::edge* newEdge = new ipc::detail::edge {.fromNode = &this->vertices[fromNode], .toNode = &this->vertices[toNode],  .value = value};
 
     return newEdge;
 }
@@ -199,9 +199,9 @@ ipc::detail::Node<ipc::detail::edge>* ipc::Graph::isAdjacent(int fromNode, int t
     return nullptr;
 }
 
-ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int cost, bool directed)
+ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int value, bool directed)
 {
-    if(!this->isDirected && directed) ipc::Graph::addEdge(toNode, fromNode, cost, false);
+    if(!this->isDirected && directed) ipc::Graph::addEdge(toNode, fromNode, value, false);
 
     if (!ipc::Graph::isValid(fromNode) || !ipc::Graph::isValid(toNode))
     {
@@ -217,14 +217,14 @@ ReturnStatus ipc::Graph::addEdge(int fromNode, int toNode, int cost, bool direct
     else if(!ipc::Graph::hasEdges(fromNode))
     {
         this->edges[fromNode] = new LinkedList<ipc::detail::edge>; 
-        this->edges[fromNode]->prepend(ipc::Graph::newEdge(fromNode, toNode, cost));
+        this->edges[fromNode]->prepend(ipc::Graph::newEdge(fromNode, toNode, value));
 
         if (DebugLevelGraph > 3) cout << "First element added." << endl;
 
         return ReturnSuccess;
     }
 
-    else return ipc::Graph::addEdgeSorted(this->edges[fromNode]->newNode(ipc::Graph::newEdge(fromNode, toNode, cost)));
+    else return ipc::Graph::addEdgeSorted(this->edges[fromNode]->newNode(ipc::Graph::newEdge(fromNode, toNode, value)));
 }
 
 ReturnStatus ipc::Graph::removeEdge(int fromNode, int toNode, bool directed)
@@ -285,7 +285,7 @@ void ipc::Graph::print()
             
             while(tmp != nullptr)
             {
-                cout << "(" << tmp->data->toNode->vertice <<", " << tmp->data->cost <<")";
+                cout << "(" << tmp->data->toNode->vertice <<", " << tmp->data->value <<")";
                 if(tmp->next != nullptr) cout << ", ";
                 tmp = tmp->next;
             }

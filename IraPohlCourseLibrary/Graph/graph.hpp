@@ -29,7 +29,7 @@ namespace ipc
             struct vertice* fromNode;
             struct vertice* toNode;
 
-            int cost;
+            int value;
         };
     }
 
@@ -41,7 +41,7 @@ namespace ipc
         int numOfVertices;
         bool isDirected;
 
-        void initVertices(int numOfVertices, int cost = -1);
+        void initVertices(int numOfVertices, int value = -1);
 
         void initEdges(int numOfVertices);
 
@@ -64,20 +64,20 @@ namespace ipc
 
         int e(int fromNode);
 
-        int getNodeValue(int fromNode);
+        int cost(int fromNode);
 
         ReturnStatus setNodeValue(int fromNode, int value);
 
 
-        int getEdgeValue(int fromNode, int toNode);
+        int cost(int fromNode, int toNode);
 
-        ReturnStatus setEdgeValue(int fromNode, int toNode, int cost, bool directed = true);
+        ReturnStatus setEdgeValue(int fromNode, int toNode, int value, bool directed = true);
 
-        detail::edge* newEdge(int fromNode, int toNode, int cost = 1);
+        detail::edge* newEdge(int fromNode, int toNode, int value = 1);
 
         detail::Node<detail::edge>* isAdjacent(int fromNode, int toNode);
 
-        ReturnStatus addEdge(int fromNode, int toNode, int cost = 1, bool directed = true);
+        ReturnStatus addEdge(int fromNode, int toNode, int value = 1, bool directed = true);
 
         ReturnStatus removeEdge(int fromNode, int toNode, bool directed = true);
 
