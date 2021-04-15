@@ -14,8 +14,8 @@
 #include "graph.hpp"
 #include "montecarlo_graph.hpp"
 #include "priority_queue.hpp"
-#include "dijkstra_algo.hpp"
 #include "hex.hpp"
+#include "sp_algo.hpp"
 #include "jarnikPrim_algo.hpp"
 #include "prob_functions.hpp"
 

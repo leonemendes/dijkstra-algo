@@ -5,11 +5,11 @@
 
 // DEBUG LEVEL
 const int DebugLevel = 0;
-const int DebugLevelGraph = 5;
-const int DebugLevelShortestPath = 5;
+const int DebugLevelGraph = 0;
+const int DebugLevelShortestPath = 0;
 const int DebugLevelMstJp = 0;
 const int DebugLevelPq = 0;
-const int DebugLevelHex = 5;
+const int DebugLevelHex = 0;
 
 // TYPE DEIFINITIONS
 

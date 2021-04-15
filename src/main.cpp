@@ -61,7 +61,7 @@ int main()
         else if (pcAgainstPc && player == ipc::detail::HexColor::Blue)
         {
             cout << endl;
-            board.smartMove(player, ipc::detail::PcLevel::Dumb);
+            board.smartMove(player, ipc::detail::PcLevel::Easy);
             player = ipc::detail::HexColor::Red;
 
         }
@@ -91,7 +91,7 @@ int main()
 
     }
 
-
+    board.gameReport();
 
     auto gameStop = high_resolution_clock::now();
     auto gameDuration = duration_cast<minutes>(gameStop - gameStart);
