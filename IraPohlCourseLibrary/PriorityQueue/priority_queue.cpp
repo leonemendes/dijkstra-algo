@@ -39,7 +39,7 @@ ReturnStatus ipc::PriorityQueue::insertNodeSorted(ipc::detail::Node<ipc::detail:
         }
         tmp = tmp->next;
     }
-
+    if (DebugLevelPq > 3) cout << "PQ: Sorted element added." << endl;
     return ReturnSuccess;
 }
 
@@ -47,6 +47,8 @@ ipc::PriorityQueue::PriorityQueue(LinkedList<ipc::detail::vertice>* head):queue(
 {
     if (DebugLevelPq > 3) cout << "PriorityQueue Class constructor called." << endl;
 }
+
+bool ipc::PriorityQueue::empty(){ return (this->queue == nullptr || this->queue->h() == nullptr) ? true : false; };
 
 int ipc::PriorityQueue::size(){ return this->queue->size(); }
 
@@ -105,10 +107,10 @@ ipc::detail::vertice* ipc::PriorityQueue::top(){ return this->queue->h()->data; 
 
 ReturnStatus ipc::PriorityQueue::insert(int v, int fromV, int val)
 {
-    if(this->queue == nullptr)
+    if(this->queue == nullptr || this->queue->h() == nullptr)
     {
         this->queue = new LinkedList<ipc::detail::vertice>;
-        this->queue->prepend(ipc::PriorityQueue::newVertice(v, fromV, val));
+        this->queue->prepend(this->newVertice(v, fromV, val));
 
         if (DebugLevelPq > 3) cout << "PQ: First element added." << endl;
 
@@ -123,6 +125,8 @@ ReturnStatus ipc::PriorityQueue::insert(int v, int fromV, int val)
 
     return ipc::PriorityQueue::insertNodeSorted(this->queue->newNode(ipc::PriorityQueue::newVertice(v, fromV, val)));
 }
+
+ipc::detail::Node<ipc::detail::vertice>* ipc::PriorityQueue::popHead() { return this->queue->popHead(); }
 
 ipc::detail::Node<ipc::detail::vertice>* ipc::PriorityQueue::minPriority()
 {

@@ -25,6 +25,8 @@ namespace ipc
         public:
         PriorityQueue(LinkedList<detail::vertice>* head = nullptr);
 
+        bool empty();
+
         int size();
 
         ReturnStatus chgPriority(int v, int fromV, int val, bool smallest = true);
@@ -34,6 +36,8 @@ namespace ipc
         detail::vertice* top();
 
         ReturnStatus insert(int v, int fromV, int val);
+
+        detail::Node<detail::vertice>* popHead();
 
         detail::Node<detail::vertice>* minPriority();
 
