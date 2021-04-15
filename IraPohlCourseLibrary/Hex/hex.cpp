@@ -39,8 +39,9 @@ pair<vector<int>,int> ipc::Hex::minPathToSide(int fromNode, ipc::detail::BoardSi
         if(this->nodeColor(toNode) != avoid)
         {
             pair<vector<int>,int> tmpDijkstra = ipc::ShortestPath::aStarHex(dynamic_cast<ipc::Graph*>(this), fromNode, toNode, colors);
-            if(!tmpDijkstra.first.empty() && tmpDijkstra.second < pathNCost.second)
+            if(!tmpDijkstra.first.empty() && tmpDijkstra.second < pathNCost.second && tmpDijkstra.second >= 0)
             {
+                if(DebugLevelHex > 4) cout << "From " << fromNode << " to " << toNode << " with cost: " << tmpDijkstra.second << endl;
                 pathNCost = tmpDijkstra;
             }
         }
@@ -333,6 +334,8 @@ ReturnStatus ipc::Hex::smartMove(detail::HexColor p, ipc::detail::PcLevel level)
     case ipc::detail::PcLevel::Dumb:
         if(DebugLevelHex > 2) cout << "Dumb movement" << endl;
         int randPosInd;
+
+        this->playerSelect(p)->touched = ipc::detail::BoardSide::None;
         while (status != ReturnSuccess && tries < this->v())
         {
             randPosInd = ipc::ProbFunctions::randNum(0, this->v());
@@ -367,10 +370,11 @@ ReturnStatus ipc::Hex::smartMove(detail::HexColor p, ipc::detail::PcLevel level)
             int ind;
             while(status != ReturnSuccess)
             {
-                colors.push_back(static_cast<int>(p));
+                if(tries == 0) colors.push_back(static_cast<int>(p));
                 if(tries == 3) return this->smartMove(p, ipc::detail::PcLevel::Dumb);
     
                 vector<int> winSeq = this->isWinner(this->playerSelect(p)->movements.back(), colors);
+                if(DebugLevelHex > 3) this->printPath(winSeq);
                 if(!winSeq.empty())
                 {
                     ind = winSeq[0];
@@ -480,12 +484,14 @@ void ipc::Hex::gameReport()
 void ipc::Hex::printPath(vector<int> v)
 {
     if(v.empty()) return;
+    pair<int,int> pos;
 
     cout<< "Player path: ";
     
     for(auto x: v)
     {
-        cout << x;
+        pos = this->indexToSquarePos(x);
+        cout << static_cast<char>(pos.second + 65)  << pos.first;
         if (x != v.back()) cout << "->";
     }
     cout << endl;

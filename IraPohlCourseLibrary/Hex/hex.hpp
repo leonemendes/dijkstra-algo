@@ -22,6 +22,7 @@ using std::exception;
 using std::setw;
 using std::string;
 using std::abs;
+using std::reverse;
 
 
 
