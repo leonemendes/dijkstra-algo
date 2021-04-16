@@ -139,7 +139,7 @@ pair<vector<int>, int> ipc::ShortestPath::aStarHex(ipc::Graph* g, int fromNode, 
     unordered_map<int, int> cameFrom;
     unordered_map<int, int> costSoFar;
 
-    int finalCost = -1;
+    int finalCost = 0;
 
     cameFrom[fromNode] = fromNode;
     costSoFar[fromNode] = 0;
