@@ -74,7 +74,7 @@ int main()
             cin >> pos.second;
             cout << endl;
 
-            if(board.placeStone(pos, static_cast<ipc::detail::HexColor>(player)) == ReturnError)
+            if(board.placeStone(pos, player) == ReturnError)
             {
                 cout << "Position forbidden. Try again" << endl;
                 cin.clear();
@@ -96,8 +96,8 @@ int main()
     board.gameReport();
 
     auto gameStop = high_resolution_clock::now();
-    auto gameDuration = duration_cast<minutes>(gameStop - gameStart);
-    cout << "Duration time: " << gameDuration.count() << "m" << endl;
+    auto gameDuration = duration_cast<seconds>(gameStop - gameStart);
+    cout << "Duration time: " << gameDuration.count() << "S" << endl;
 
     return 0;
 }

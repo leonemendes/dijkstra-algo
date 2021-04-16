@@ -449,6 +449,7 @@ vector<int> ipc::Hex::isWinner(int fromNode, vector<int> colors)
     minPathOne = this->minPathToSide(fromNode, sideOne, colors);
     if(!minPathOne.first.empty())
     {
+        if(DebugLevelHex > 3) cout << "Half way there!" << endl;
         minPathTwo = this->minPathToSide(fromNode, sideTwo, colors);
         if(!minPathTwo.first.empty()) 
         {            
@@ -472,6 +473,8 @@ vector<int> ipc::Hex::isWinner(int fromNode, vector<int> colors)
 
 void ipc::Hex::gameReport()
 {
+     cout << "-----------GAME LOG-------------" << endl;
+
     cout << CoutColorStart + CoutColorBoldOn + CoutColorBlue << "Player 1 made " << this->playerSelect(ipc::detail::HexColor::Blue)->movements.size() << " movements: " << endl;
     ipc::Hex::printPath(this->playerSelect(ipc::detail::HexColor::Blue)->movements);
     cout << CoutColorEnd;
