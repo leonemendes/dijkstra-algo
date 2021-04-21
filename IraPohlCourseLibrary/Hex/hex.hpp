@@ -6,7 +6,9 @@
 #include <iomanip>
 #include <exception>
 #include <string>
+#include <algorithm>        // min,max
 #include <cstdlib>          // abs
+#include <numeric>          /// iota
 
 
 
@@ -23,6 +25,14 @@ using std::setw;
 using std::string;
 using std::abs;
 using std::reverse;
+using std::max;
+using std::min;
+using std::iota;
+using std::transform;
+using std::plus;
+using std::minus;
+using std::max_element;
+using std::find;
 
 
 
@@ -53,6 +63,8 @@ namespace ipc
             Null = -1,
             Dumb = 0,
             Easy = 1,
+            Medium = 2,
+            Hard = 3,
         };
 
         class Player
@@ -79,7 +91,7 @@ namespace ipc
 
         void initPlayers();
 
-        pair<vector<int>,int> minPathToSide(int fromNode, detail::BoardSide side = detail::BoardSide::None, vector<int> colors = {});
+        pair<vector<int>,int> minPathToSide(int fromNode, detail::BoardSide side = detail::BoardSide::None, vector<int> colors = {}, bool countPaths = false);
 
         detail::BoardSide closestSide(int fromNode, detail::HexColor color = detail::HexColor::None);
 
@@ -91,9 +103,11 @@ namespace ipc
 
         detail::Player* playerSelect(detail::HexColor p);
 
-        bool isPlayerSide(detail::HexColor p, detail::BoardSide side);
+        bool isPlayerSide(detail::HexColor player, detail::BoardSide side);
 
-        detail::BoardSide nodeSide(int fromNode);
+        detail::BoardSide nodeSide(int fromNode, detail::HexColor color = ipc::detail::HexColor::None);
+
+        bool isPlayerNodeSide(detail::HexColor player, int fromNode);
 
         public:
         bool endGame;
@@ -111,7 +125,11 @@ namespace ipc
 
         int squarePosToIndex(pair<char,int> p);
 
-        int heuristic(int fromNode, int toNode);
+        int heuristicAstar(int fromNode, int toNode);
+
+        int heuristicMiniMax(detail::HexColor player, int fromNode);
+
+        int heuristicMiniMaxNeighbouringFactor(detail::HexColor player, int fromNode);
 
         ReturnStatus genBoard();
 
@@ -127,7 +145,11 @@ namespace ipc
 
         ReturnStatus smartMove(detail::HexColor player, detail::PcLevel level = detail::PcLevel::Null);
 
-        vector<int> isWinner(int fromNode, vector<int> colors = {static_cast<int>(ipc::detail::HexColor::Null)});
+        pair<vector<int>, bool> isWinner(int fromNode, vector<int> colors = {static_cast<int>(ipc::detail::HexColor::Null)});
+        
+        pair<int,int> miniMaxAlphaBeta(ipc::detail::HexColor player, int fromNode, int depth = 5, int alpha = -1000, int beta = +1000);
+
+        int monteCarloPlayer(ipc::detail::HexColor player, int sim);
 
         void gameReport();
 
