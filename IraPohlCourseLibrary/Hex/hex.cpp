@@ -479,7 +479,7 @@ ReturnStatus ipc::Hex::smartMove(ipc::detail::HexColor player, ipc::detail::PcLe
             int ind;
             while(status != ReturnSuccess)
             {
-                ind = this->monteCarloPlayer(player, 10000);
+                ind = this->monteCarloPlayer(player, 1000);
                 status = this->placeStone(ind, player);
             }
             pos = this->indexToSquarePos(ind);
@@ -623,7 +623,7 @@ int ipc::Hex::monteCarloPlayer(ipc::detail::HexColor player, int sim)
     ipc::detail::HexColor opponent = (player == ipc::detail::HexColor::Blue) ? ipc::detail::HexColor::Red : ipc::detail::HexColor::Blue;
 
     volatile ipc::detail::HexColor actualPlayer;
-    volatile ipc::detail::HexColor winner = ipc::detail::HexColor::None;
+    volatile ipc::detail::HexColor winner = ipc::detail::HexColor::Blue;
     vector<int> colors = {static_cast<int>(ipc::detail::HexColor::Red)};
 
     vector<int> fromNodes = this->boardSide(ipc::detail::BoardSide::Top);
@@ -647,7 +647,7 @@ int ipc::Hex::monteCarloPlayer(ipc::detail::HexColor player, int sim)
 
         for(int s = 0; s < sim; s++)
         {
-            winner = ipc::detail::HexColor::None;
+            winner = ipc::detail::HexColor::Blue;
             if(DebugLevelHex > 2) cout << "Monte Carlo sim: " << s << endl;
             vector<int> nodes = moves;
             
@@ -676,12 +676,9 @@ int ipc::Hex::monteCarloPlayer(ipc::detail::HexColor player, int sim)
                                 winner = ipc::detail::HexColor::Red;
                                 break;
                             }
-                            else winner = ipc::detail::HexColor::Blue;
                         }
-                        else winner = ipc::detail::HexColor::Blue;
                     }
                 }
-                else winner = ipc::detail::HexColor::Blue;
             }
             for(auto n: nodes) if(n != node) this->setNodeValue(n, static_cast<int> (ipc::detail::HexColor::Empty));
 
