@@ -21,7 +21,7 @@ ReturnStatus ipc::MinSpanTree::mst()
     detail::Node<detail::vertice>* head;
 
 
-    neigh = g->neighbors(v);
+    neigh = g->neighbours(v);
     
     while (!neigh.empty())
     {
@@ -40,7 +40,7 @@ ReturnStatus ipc::MinSpanTree::mst()
         q->insert(v, fromV, cost);
 
         if(q->size() == g->v()) break;
-        else neigh = g->neighbors(v);
+        else neigh = g->neighbours(v);
     }
 
     if(q->size() != g->v())

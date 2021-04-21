@@ -55,7 +55,7 @@ int main()
         {
             cout << "Player " << static_cast<int>(player) - 1 << " turn. Set position: ";
             cout << endl;
-            board.smartMove(player, ipc::detail::PcLevel::Easy);
+            board.smartMove(player, ipc::detail::PcLevel::Hard);
             player = ipc::detail::HexColor::Blue;
 
         }
