@@ -60,7 +60,7 @@ pair<vector<int>, int> ipc::ShortestPath::dijkstra(ipc::Graph* g, int fromNode, 
 
         if(currentNode == toNode) break;
 
-        for(auto nextNode : g->neighbors(currentNode))
+        for(auto nextNode : g->neighbours(currentNode))
         {
             int newCost = costSoFar[currentNode] + g->cost(currentNode, nextNode);
 
@@ -106,7 +106,7 @@ pair<vector<int>, int> ipc::ShortestPath::dijkstraHex(ipc::Graph* g, int fromNod
             break;
         }
 
-        for(auto nextNode : g->neighbors(currentNode))
+        for(auto nextNode : g->neighbours(currentNode))
         {
             if (DebugLevelShortestPath > 1) cout << "To node: " << nextNode << endl;
             
@@ -159,7 +159,7 @@ pair<vector<int>, int> ipc::ShortestPath::aStarHex(ipc::Graph* g, int fromNode, 
             break;
         }
 
-        for(auto nextNode : g->neighbors(currentNode))
+        for(auto nextNode : g->neighbours(currentNode))
         {
             if (DebugLevelShortestPath > 1) cout << "To node: " << nextNode << endl;
             
