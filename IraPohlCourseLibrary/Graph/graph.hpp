@@ -81,7 +81,7 @@ namespace ipc
 
         ReturnStatus removeEdge(int fromNode, int toNode, bool directed = true);
 
-        vector<int> neighbors(int fromNode);
+        vector<int> neighbours(int fromNode);
 
         void print();
 

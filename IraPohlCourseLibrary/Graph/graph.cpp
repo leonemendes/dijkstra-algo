@@ -79,7 +79,7 @@ ReturnStatus ipc::Graph::init(int numOfVertices, int verticeBaseCost, bool isDir
 
 bool ipc::Graph::isDirectedFlag(){ return this->isDirected; }
 
-int ipc::Graph::v(){ return numOfVertices; }
+int ipc::Graph::v(){ return this->numOfVertices; }
 
 bool ipc::Graph::isValid(int v)
 {
@@ -256,7 +256,7 @@ ReturnStatus ipc::Graph::removeEdge(int fromNode, int toNode, bool directed)
     return ReturnSuccess;
 }
 
-vector<int> ipc::Graph::neighbors(int fromNode)
+vector<int> ipc::Graph::neighbours(int fromNode)
 {
     if(!isValid(fromNode)) return {};
 
